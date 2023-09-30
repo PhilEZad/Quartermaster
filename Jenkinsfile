@@ -10,13 +10,4 @@ pipeline {
         '''
 	}
   }
-	stage("Build") {
-		steps {
-		}
-	}
-	stage("Test") {
-			steps{
-		}
-	}
-}
 }
