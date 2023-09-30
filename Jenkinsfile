@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  stages{
+  stages {
     stage("Verify Tooling") {
       steps {
         sh '''
@@ -8,7 +8,14 @@ pipeline {
         docker version
         docker compose version
         '''
+	}
   }
 	stage("Build") {
+		steps {
+		}
+	}
+	stage("Test") {
+			steps{
+		}
 	}
 }
