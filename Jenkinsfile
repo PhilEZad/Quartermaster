@@ -9,4 +9,6 @@ pipeline {
         docker compose version
         '''
   }
+	stage("Build") {
+	}
 }
