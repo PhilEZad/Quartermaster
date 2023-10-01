@@ -24,4 +24,3 @@ networks:
     backend:
     ipam:
         driver: default
-        "
