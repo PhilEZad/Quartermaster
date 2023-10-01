@@ -22,6 +22,6 @@ services:
     
 networks:
     frontend:
+        driver: default
     backend:
-    ipam:
         driver: default
