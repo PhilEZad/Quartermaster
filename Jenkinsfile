@@ -13,7 +13,7 @@ pipeline {
 		stage("Cleaning") {
       steps {
 		echo "Cleaning..."
-		sh 'docker system prune -a ---volumes -f'
+		sh 'docker system prune -a --volumes -f'
 		echo "Cleaning complete."
 
 		}
