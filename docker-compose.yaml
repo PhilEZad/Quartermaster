@@ -1,0 +1,27 @@
+services:
+    frontend:
+        image: "node:latest"
+        container_name: qm-frontend
+        build: ./frontend
+        depends_on:
+            backend: service_started
+        networks:
+            - frontend
+        ports:
+            - "3000"
+    backend:
+        image:
+        container_name: qm-backend
+        build: ./frontend/app
+        networks:
+            - frontend
+            - backend
+        ports:
+            - "5143"
+    
+networks:
+    frontend:
+    backend:
+    ipam:
+        driver: default
+        "

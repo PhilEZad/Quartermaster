@@ -8,7 +8,14 @@ pipeline {
         docker version
         docker compose version
         '''
+		}
 	}
-  }
+	stage("Build") {
+      steps {
+		echo "Building..."
+		sh 'docker-compose up -d'
+		echo "Build complete."
+
+		}
 	}
-}
+}}
