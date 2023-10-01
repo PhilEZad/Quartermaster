@@ -7,7 +7,7 @@ services:
         build: ./frontend
         depends_on:
             backend: 
-                condition: service_started
+                condition: service_healthy
         networks:
             - fe
         ports:
