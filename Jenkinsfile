@@ -10,10 +10,18 @@ pipeline {
         '''
 		}
 	}
+		stage("Cleaning") {
+      steps {
+		echo "Cleaning..."
+		sh 'docker system prunte -a ---volumes -f'
+		echo "Cleaning complete."
+
+		}
+	}
 	stage("Build") {
       steps {
 		echo "Building..."
-		sh 'docker-compose up -d'
+		sh 'docker compose up -d'
 		echo "Build complete."
 
 		}
