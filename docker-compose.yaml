@@ -15,13 +15,19 @@ services:
         container_name: qm-backend
         build: ./backend/app
         networks:
-            - frontend
-            - backend
+            - fe
+            - be
         ports:
             - "5143"
     
 networks:
-    frontend:
-        driver: default
-    backend:
-        driver: default
+    fe:
+        ipam:
+            driver: default
+                config:
+                    - subnet: "192.168.1.0/24"
+    be:
+        ipam:
+            driver: default
+                config:
+                    - subnet: "192.168.2.0/24"
