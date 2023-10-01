@@ -1,3 +1,5 @@
+version: "3"
+
 services:
     frontend:
         image: "node:latest"
@@ -9,7 +11,7 @@ services:
         networks:
             - fe
         ports:
-            - "3000"
+            - "3000:81"
     backend:
         image: "mcr.microsoft.com/dotnet/aspnet:8.0"
         container_name: qm-backend
@@ -18,7 +20,7 @@ services:
             - fe
             - be
         ports:
-            - "5143"
+            - "5143:80"
     
 networks:
     fe:
