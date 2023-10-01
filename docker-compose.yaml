@@ -10,9 +10,10 @@ services:
         ports:
             - "3000:81"
     backend:
-        image: "mcr.microsoft.com/dotnet/aspnet:8.0"
         container_name: qm-backend
-        build: ./backend/app
+        build:
+            context: /backend
+            dockerfile: Dockerfile
         networks:
             - fe
             - be
