@@ -7,7 +7,7 @@ services:
             backend: 
                 condition: service_started
         networks:
-            - frontend
+            - fe
         ports:
             - "3000"
     backend:
