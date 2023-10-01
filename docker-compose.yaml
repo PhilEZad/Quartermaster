@@ -6,10 +6,7 @@ services:
         container_name: qm-frontend
         build: ./frontend
         depends_on:
-            backend: 
-                condition: service_healthy
-        networks:
-            - fe
+            - backend
         ports:
             - "3000:81"
     backend:
