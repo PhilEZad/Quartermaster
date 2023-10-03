@@ -1,6 +1,6 @@
 #Get the SDK image to build and publish the project
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
-WORKDIR /app
+WORKDIR backend/app
 
 # Copy everything
 COPY . ./
