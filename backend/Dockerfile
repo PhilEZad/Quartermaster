@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /app
 
 # Copy the .sln file and restore dependencies (NuGet packages)
-COPY Quartermaster/backend/Backend.sln .
+COPY ./Backend.sln .
 RUN dotnet restore
 
 # Copy the entire backend directory
-COPY Quartermaster/backend/ .
+COPY ./backend/ .
 
 # Build the API project
 WORKDIR /app/API
