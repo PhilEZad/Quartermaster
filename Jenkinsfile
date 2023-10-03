@@ -22,14 +22,13 @@ pipeline {
       steps {
 		echo "Running setup..."
 		sh 'docker compose up -d'
-		sh 'RUN npm install'
 		echo "Setup complete."
 		}
 	}
 	stage("Build") {
       steps {
 		echo "Building..."
-		sh 'RUN dotnet build'
+		sh 'dotnet build backend/API/API.csproj'
 		echo "Build complete."
 		}
 	}
