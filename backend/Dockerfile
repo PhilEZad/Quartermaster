@@ -3,11 +3,11 @@ FROM mcr.microsoft.com/dotnet/core/sdk:latest AS build
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY ./backend/api/*.csproj ./
+COPY ./api/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build the application
-COPY ./backend/api/ ./
+COPY ./api/ ./
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
