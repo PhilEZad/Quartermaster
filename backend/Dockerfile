@@ -1,18 +1,21 @@
-# Get the SDK image to build and publish the project
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+# Use the official .NET Core SDK image as a parent image
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+
+# Set the working directory within the container
 WORKDIR /app
 
-# Copy the project files
-COPY Backend.Api/Backend.Api.csproj ./Backend.Api/
-COPY Backend.Application/Backend.Application.csproj ./Backend.Application/
-COPY Backend.Domain/Backend.Domain.csproj ./Backend.Domain/
-COPY Backend.Infrastructure/Backend.Infrastructure.csproj ./Backend.Infrastructure/
+# Copy the .sln file and restore dependencies (NuGet packages)
+COPY Quartermaster/backend/Backend.sln .
+RUN dotnet restore
 
-# Restore as distinct layers
-RUN dotnet restore Backend.Api/Backend.Api.csproj
+# Copy the entire backend directory
+COPY Quartermaster/backend/ .
 
-# Copy the rest of the application code
-COPY . ./
+# Build the API project
+WORKDIR /app/API
+RUN dotnet build -c Release -o /app/out
 
-# Build and publish the API project
-RUN dotnet publish Backend.Api/Backend.Api.csproj -c Release -o out/api
+# Run the application from the API project
+FROM build AS runtime
+WORKDIR /app/out
+ENTRYPOINT ["dotnet", "API.dll"]
