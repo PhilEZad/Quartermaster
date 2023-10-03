@@ -13,7 +13,7 @@ COPY UnitTests/UnitTests.csproj ./UnitTests/
 # Restore all projects
 RUN dotnet restore
 
-# Copy everything else
+# Copy everything
 COPY . ./
 
 ENTRYPOINT ["dotnet", "API.dll"]
