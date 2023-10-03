@@ -28,7 +28,6 @@ pipeline {
 	stage("Build") {
       steps {
 		echo "Building..."
-		sh 'dotnet build backend/API/API.csproj'
 		echo "Build complete."
 		}
 	}
