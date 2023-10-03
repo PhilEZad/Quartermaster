@@ -1,5 +1,5 @@
 # Use the official image as a parent image
-FROM mcr.microsoft.com/dotnet/core/sdk:latest AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
