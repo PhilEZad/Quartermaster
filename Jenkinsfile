@@ -28,6 +28,8 @@ pipeline {
 	stage("Build") {
       steps {
 		echo "Building..."
+		dir("backend/api"){
+			sh 'dotnet build'
 		echo "Build complete."
 		}
 	}
