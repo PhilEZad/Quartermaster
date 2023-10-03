@@ -18,12 +18,19 @@ pipeline {
 
 		}
 	}
+	stage("Setup") {
+      steps {
+		echo "Running setup..."
+		sh 'docker compose up -d'
+		sh 'RUN npm install'
+		echo "Setup complete."
+		}
+	}
 	stage("Build") {
       steps {
 		echo "Building..."
-		sh 'docker compose up -d'
+		sh 'RUN dotnet build'
 		echo "Build complete."
-
 		}
 	}
 }}
