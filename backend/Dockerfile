@@ -1,23 +1,33 @@
-#Get the SDK image to build and publish the project
+# Get the SDK image to build and publish the project
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
-WORKDIR backend/app
+WORKDIR /app
 
-# Copy everything
-COPY . ./
-
-# Restore as distinct layers
+# Copy the solution file and restore as distinct layers
+COPY Backend.sln ./
 RUN dotnet restore
 
-# Build and publish a release
-RUN dotnet publish -c Release -o out
+# Copy the entire solution
+COPY . ./
+
+# Build and publish the projects
+RUN dotnet publish Backend/Backend.Api/Backend.Api.csproj -c Release -o out/api
+RUN dotnet publish Backend/Backend.Application/Backend.Application.csproj -c Release -o out/application
+RUN dotnet publish Backend/Backend.Domain/Backend.Domain.csproj -c Release -o out/domain
+RUN dotnet publish Backend/Backend.Infrastructure/Backend.Infrastructure.csproj -c Release -o out/infrastructure
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/sdk:7.0
 WORKDIR /app
 
-#Copy the build file to the app directory
-COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "dotnet.dll"]
+# Copy the published output from each project
+COPY --from=build-env /app/out/api /app/api
+COPY --from=build-env /app/out/application /app/application
+COPY --from=build-env /app/out/domain /app/domain
+COPY --from=build-env /app/out/infrastructure /app/infrastructure
 
-#Expose the port for communication
+# Set the entry point for the API project
+WORKDIR /app/api
+ENTRYPOINT ["dotnet", "Backend.Api.dll"]
+
+# Expose the port for communication
 EXPOSE 80
