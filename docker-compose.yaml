@@ -2,10 +2,10 @@ version: "3"
 
 services:
     frontend:
-        image: "node:latest"
         container_name: qm-frontend
-        build: ./frontend
-        command: sh 'npm install'
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
         depends_on:
             - backend
         ports:
