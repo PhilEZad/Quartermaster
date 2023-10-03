@@ -32,4 +32,10 @@ pipeline {
 		echo "Build complete."
 		}
 	}
+		stage("Test") {
+      steps {
+		echo "Running tests..."
+		echo "Testing complete."
+		}
+	}
 }}

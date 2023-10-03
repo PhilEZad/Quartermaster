@@ -5,6 +5,7 @@ services:
         image: "node:latest"
         container_name: qm-frontend
         build: ./frontend
+        command: sh 'npm install'
         depends_on:
             - backend
         ports:
