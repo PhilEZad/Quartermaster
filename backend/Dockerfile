@@ -16,4 +16,4 @@ RUN dotnet restore
 # Copy everything
 COPY . ./
 
-ENTRYPOINT ["dotnet", "API.dll"]
+ENTRYPOINT []
