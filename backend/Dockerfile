@@ -2,32 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /app
 
-# Copy the solution file and restore as distinct layers
-COPY Backend.sln ./
-RUN dotnet restore
+# Copy the project files
+COPY Backend.Api/Backend.Api.csproj ./Backend.Api/
+COPY Backend.Application/Backend.Application.csproj ./Backend.Application/
+COPY Backend.Domain/Backend.Domain.csproj ./Backend.Domain/
+COPY Backend.Infrastructure/Backend.Infrastructure.csproj ./Backend.Infrastructure/
 
-# Copy the entire solution
+# Restore as distinct layers
+RUN dotnet restore Backend.Api/Backend.Api.csproj
+
+# Copy the rest of the application code
 COPY . ./
 
-# Build and publish the projects
+# Build and publish the API project
 RUN dotnet publish Backend.Api/Backend.Api.csproj -c Release -o out/api
-RUN dotnet publish Backend.Application/Backend.Application.csproj -c Release -o out/application
-RUN dotnet publish Backend.Domain/Backend.Domain.csproj -c Release -o out/domain
-RUN dotnet publish Backend.Infrastructure/Backend.Infrastructure.csproj -c Release -o out/infrastructure
-
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/sdk:7.0
-WORKDIR /app
-
-# Copy the published output from each project
-COPY --from=build-env /app/out/api /app/api
-COPY --from=build-env /app/out/application /app/application
-COPY --from=build-env /app/out/domain /app/domain
-COPY --from=build-env /app/out/infrastructure /app/infrastructure
-
-# Set the entry point for the API project
-WORKDIR /app/api
-ENTRYPOINT ["dotnet", "Backend.Api.dll"]
-
-# Expose the port for communication
-EXPOSE 80
