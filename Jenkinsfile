@@ -39,4 +39,11 @@ pipeline {
 		echo "Testing complete."
 		}
 	}
-}}
+  }
+  post {
+    always {
+    // Stop and remove containers after the pipeline execution
+    sh 'docker compose down'
+    }
+  }
+}
