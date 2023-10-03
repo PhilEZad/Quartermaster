@@ -9,7 +9,7 @@ COPY ./Backend.sln .
 RUN dotnet restore
 
 # Copy the entire backend directory
-COPY ./backend/ .
+COPY . .
 
 # Build the API project
 WORKDIR /app/API
