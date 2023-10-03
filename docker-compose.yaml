@@ -15,20 +15,5 @@ services:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        networks:
-            - fe
-            - be
         ports:
             - "5143:80"
-    
-networks:
-    fe:
-        ipam:
-            driver: default
-            config:
-                - subnet: "192.168.1.0/24"
-    be:
-        ipam:
-            driver: default
-            config:
-                - subnet: "192.168.2.0/24"
