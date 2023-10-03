@@ -28,8 +28,8 @@ pipeline {
 	stage("Build") {
       steps {
 		echo "Building..."
-		dir("backend/api"){
-			sh 'dotnet build'
+		sh 'docker compose exec qm-frontend npm run build'
+		sh 'docker compose exec qm-backend dotnet run'
 		echo "Build complete."
 		}
 	}
