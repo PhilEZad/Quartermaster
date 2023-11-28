@@ -2,11 +2,11 @@
 
 public class AccountService
 {
-    private readonly IAccountRepository _accountRepository;
+
     
-    public AccountService(IAccountRepository accountRepository)
+    public AccountService()
     {
-        _accountRepository = accountRepository ?? throw new ArgumentNullException("accountRepository is null");
+
     }
     
 }
