@@ -1,12 +1,14 @@
-﻿namespace Application.Services;
+﻿using Application.Interfaces;
 
-public class AccountService
+
+namespace Application.Services;
+
+public class AccountService : IAccountService
 {
-
-    
-    public AccountService()
+    public readonly IAccountRepository _accountRepository;
+    public AccountService(IAccountRepository accountRepository)
     {
-
+        _accountRepository = accountRepository ?? throw new NullReferenceException();
     }
     
 }
