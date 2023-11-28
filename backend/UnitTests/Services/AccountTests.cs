@@ -1,3 +1,4 @@
+using Application.Services;
 using Domain;
 using FluentAssertions;
 
