@@ -14,6 +14,12 @@ public class AccountService : IAccountService
 
     public bool Create(User user)
     {
+        if (user == null)
+        {
+            throw new NullReferenceException();
+        }
+
         _accountRepository.create(user);
+        return true;
     }
 }
