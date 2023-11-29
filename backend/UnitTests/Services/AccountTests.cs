@@ -36,7 +36,7 @@ public class AccountTests
         var repo = new Mock<IAccountRepository>();
         AccountService service = new(repo.Object);
         
-        Action test = () => service.CreateAccount(null);
+        Action test = () => service.Create(null);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -54,7 +54,7 @@ public class AccountTests
             password = "test",
         };
         
-        Action test = () => service.CreateAccount(user);
+        Action test = () => service.Create(user);
 
         test.Should().NotThrow<NullReferenceException>();
     }
@@ -72,9 +72,9 @@ public class AccountTests
             password = "test",
         };
         
-        var result = service.CreateAccount(user);
+        Action result = () => service.Create(user);
 
-        result.Should().BeTrue();
+        result.Should().NotThrow<Exception>();
     }
     
     [Fact]
@@ -90,9 +90,9 @@ public class AccountTests
             password = "test",
         };
         
-        var result = service.CreateAccount(user);
+        Action result = () => service.Create(user);
 
-        result.Should().BeFalse();
+        result.Should().Throw<Exception>().WithMessage("Failed to create account");
     }
     
     [Fact]
@@ -108,9 +108,9 @@ public class AccountTests
             password = "test",
         };
         
-        var result = service.CreateAccount(user);
+        Action result = () => service.Create(user);
 
-        result.Should().Be("User already exists");
+        result.Should().Throw<Exception>().WithMessage("User already exists");
     }
     
     [Theory]
@@ -129,9 +129,9 @@ public class AccountTests
             password = password,
         };
         
-        var result = service.CreateAccount(user);
+        Action result = () => service.Create(user);
 
-        result.Should().Be(errorMessage);
+        result.Should().Throw<Exception>().WithMessage(errorMessage);
     }
     
     /*

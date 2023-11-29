@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain;
 
 
 namespace Application.Services;
@@ -10,5 +11,9 @@ public class AccountService : IAccountService
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException();
     }
-    
+
+    public bool Create(User user)
+    {
+        _accountRepository.create(user);
+    }
 }
