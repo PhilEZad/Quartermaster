@@ -613,3 +613,6 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,csharp,visualstudiocode,rider,webstorm
 Backend/.idea/.idea.Backend/.idea/indexLayout.xml
 Backend/.idea/.idea.Backend/.idea/vcs.xml
+
+# Database
+database/*
