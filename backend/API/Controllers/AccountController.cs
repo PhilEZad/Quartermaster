@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DefaultNamespace;
 
@@ -6,8 +7,9 @@ namespace DefaultNamespace;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    AccountController()
+    private readonly IAccountService _accountService;
+    private AccountController(IAccountService accountService)
     {
-        
+        _accountService = accountService ?? throw new NullReferenceException();
     }
 }

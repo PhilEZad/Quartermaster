@@ -8,15 +8,18 @@ public class DatabaseContext : DbContext
 {
     private readonly IConfiguration _config;
     
-    public DatabaseContext(IConfiguration config)
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
-        _config = config ?? throw new NullReferenceException();
+
     }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        optionsBuilder.UseSqlServer(_config.GetConnectionString("DatabaseConnection"));
+        //Setting Primary Keys
+        modelBuilder.Entity<User>()
+            .HasKey(x => x.id)
+            .HasName("PK_User");
     }
-    
+
     public DbSet<User> Users { get; set; }
 }

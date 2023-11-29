@@ -616,3 +616,6 @@ Backend/.idea/.idea.Backend/.idea/vcs.xml
 
 # Database
 database/*
+backend/API/db.db-wal
+backend/API/db.db-shm
+backend/API/db.db
