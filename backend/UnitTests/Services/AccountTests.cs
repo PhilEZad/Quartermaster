@@ -4,6 +4,7 @@ using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
 using AutoMapper;
+using Domain;
 using FluentAssertions;
 using FluentValidation;
 using Infrastructure;
@@ -119,7 +120,8 @@ public class AccountTests
     public void CreateAccount_WithValidObject_ShouldNotThrowNullReferenceException()
     {
         // Arrange
-        var setup = CreateServiceSetup();
+        var mockRepo = new Mock<IAccountRepository>();
+        var setup = CreateServiceSetup().WithAccountRepository(mockRepo.Object);
         var service = setup.CreateService();
         
         var user = new RegisterRequest
@@ -128,6 +130,16 @@ public class AccountTests
             email = "thisisavalid@email.com",
             password = "test1231412312",
         };
+        
+        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(new User
+        {
+            Id = 1,
+            Username = user.username,
+            Email = user.email,
+            HasedPassword = user.password,
+            DateCreated = DateTime.Now,
+            DateModified = DateTime.Now
+        });
         
         // Act
         Action test = () => service.Create(user);
@@ -140,7 +152,9 @@ public class AccountTests
     public void CreateAccount_Success_ShouldReturnTrue()
     {
         // Arrange
-        var setup = CreateServiceSetup();
+        var mockRepo = new Mock<IAccountRepository>();
+        var setup = CreateServiceSetup()
+            .WithAccountRepository(mockRepo.Object);
         var service = setup.CreateService();
 
         var user = new RegisterRequest
@@ -149,6 +163,16 @@ public class AccountTests
             email = "thisisavalid@email.com",
             password = "test12312412312312",
         };
+        
+        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(new User
+        {
+            Id = 1,
+            Username = user.username,
+            Email = user.email,
+            HasedPassword = user.password,
+            DateCreated = DateTime.Now,
+            DateModified = DateTime.Now
+        });
         
         // Act
         Action result = () => service.Create(user);
@@ -161,7 +185,8 @@ public class AccountTests
     public void CreateAccount_Failure_ShouldReturnFalse()
     {
         // Arrange
-        var setup = CreateServiceSetup();
+        var mockRepo = new Mock<IAccountRepository>();
+        var setup = CreateServiceSetup().WithAccountRepository(mockRepo.Object);
         var service = setup.CreateService();
 
         var user = new RegisterRequest
@@ -169,21 +194,23 @@ public class AccountTests
             username = "test",
             email = "thisisavalid@email.com",
             password = "test13214123123123",
-            
         };
+        
+        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(null as User);
 
         // Act
         Action result = () => service.Create(user);
 
         // Assert
-        result.Should().Throw<Exception>().WithMessage("Failed to create account");
+        result.Should().Throw<NullReferenceException>().WithMessage("Failed to create account");
     }
     
     [Fact]
     public void CreateAccount_WithExistingUser_ShouldReturnMessage()
     {
         // Arrange
-        var setup = CreateServiceSetup();
+        var mockRepo = new Mock<IAccountRepository>();
+        var setup = CreateServiceSetup().WithAccountRepository(mockRepo.Object);
         var service = setup.CreateService();
 
         var user = new RegisterRequest
@@ -192,6 +219,11 @@ public class AccountTests
             email = "thisisavalid@email.com",
             password = "test1234123",
         };
+
+        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Throws(new Exception("User already exists"));
+        
+        mockRepo.Setup(x => x.Create(It.IsAny<User>()))
+            .Throws(new Exception("User already exists"));
         
         // Act
         Action result = () => service.Create(user);
@@ -201,6 +233,7 @@ public class AccountTests
     }
     
     [Theory]
+    [InlineData(null,"Password cannot be null")]
     [InlineData("1234","Password must be at least 8 characters long")]
     [InlineData("","Password can not be empty")]
     public void CreateAccount_WithInvalidPassword_ShouldReturnMessage(String password, String errorMessage)
@@ -255,7 +288,7 @@ public class AccountTests
         var hasher = new PasswordHasher();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
-        return new ServiceSetup(repoMock.Object, hasher, mapper, validator, validatorDto);
+        return new ServiceSetup(repoMock, hasher, mapper, validator, validatorDto);
     }
     
     private class ServiceSetup
@@ -267,22 +300,22 @@ public class AccountTests
         private RegisterRequestValidator _accountDtoValidator;
 
         public ServiceSetup(
-            IAccountRepository accountRepository,
+            Mock<IAccountRepository> accountRepository,
             IPasswordHasher passwordHasher,
             IMapper mapper,
             UserValidator userValidator,
             RegisterRequestValidator accountDtoValidator)
         {
-            _accountRepository = accountRepository;
+            _accountRepository = accountRepository.Object;
             _passwordHasher = passwordHasher;
             _mapper = mapper;
             _userValidator = userValidator;
             _accountDtoValidator = accountDtoValidator;
         }
 
-        public ServiceSetup WithAccountRepository(IAccountRepository accountRepository)
+        public ServiceSetup WithAccountRepository(IAccountRepository accountRepositoryMock)
         {
-            _accountRepository = accountRepository;
+            _accountRepository = accountRepositoryMock;
             return this;
         }
 

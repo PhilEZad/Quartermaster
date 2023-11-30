@@ -53,6 +53,9 @@ public class AccountService : IAccountService
 
         User returnUser = _accountRepository.Create(user);
         
+        if (returnUser == null)
+            throw new NullReferenceException("Failed to create account");
+        
         validation = _userValidator.Validate(returnUser);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
