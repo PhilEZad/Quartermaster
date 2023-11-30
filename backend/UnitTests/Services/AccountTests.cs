@@ -277,6 +277,30 @@ public class AccountTests
         result.Should().NotThrow<ValidationException>();
     }
     
+    [Fact]
+    public void CreateAccount_WithExistingUser_ShouldThrowExceptionWithMessage()
+    {
+        // Arrange
+        var mockRepo = new Mock<IAccountRepository>();
+        var setup = CreateServiceSetup().WithAccountRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        var user = new RegisterRequest
+        {
+            username = "test",
+            email = "thisisavalidemail",
+            password = "thisisavalidpassword",
+        };
+
+        mockRepo.Setup(x => x.DoesUserExist(user.username)).Returns(true);
+        
+        // Act
+        Action result = () => service.Create(user);
+
+        // Assert
+        result.Should().Throw<Exception>().WithMessage("User already exists");
+    }
+    
     /*
      * Helper Class /w methods for Tests Setup
      */

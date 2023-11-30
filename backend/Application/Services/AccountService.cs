@@ -49,8 +49,12 @@ public class AccountService : IAccountService
         
         var user = _mapper.Map<User>(registerRequest);
         
+        if (_accountRepository.DoesUserExist(user.Username))
+            throw new Exception("User already exists");
+        
         user.HasedPassword = _passwordHasher.Hash(registerRequest.password);
-
+        user.DateCreated = DateTime.Now;
+        
         User returnUser = _accountRepository.Create(user);
         
         if (returnUser == null)

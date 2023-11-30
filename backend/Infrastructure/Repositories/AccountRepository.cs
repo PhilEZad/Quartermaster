@@ -23,4 +23,9 @@ public class AccountRepository : IAccountRepository
         else
             throw new Exception("User not created");
     }
+
+    public bool DoesUserExist(string username)
+    {
+        return _context.Users.Any(u => u.Username == username);
+    }
 }
