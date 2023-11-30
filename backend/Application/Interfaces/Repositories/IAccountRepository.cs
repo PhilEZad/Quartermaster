@@ -1,10 +1,10 @@
-﻿using Application.DTO;
+﻿using Application.DTOs;
 using Domain;
 
-namespace Application.Interfaces;
+namespace Application.Interfaces.Repositories;
 
 public interface IAccountRepository
 {
-    User create(UserDTO user);
+    User Create(RegisterRequest createAccount);
 
 }

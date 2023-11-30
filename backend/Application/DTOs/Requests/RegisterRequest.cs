@@ -1,6 +1,6 @@
-﻿namespace Application.DTO;
+﻿namespace Application.DTOs;
 
-public class UserDTO
+public class RegisterRequest
 {
     public string username { get; set; }
     public string password { get; set; }

@@ -1,4 +1,6 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs;
+using Application.Interfaces;
+using Application.Interfaces.Services;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +17,11 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Create(User user)
+    public IActionResult Create(RegisterRequest registerRequest)
     {
         try
         {
-            _accountService.Create(user);
+            _accountService.Create(registerRequest);
             return Ok();
         }
         catch (Exception e)

@@ -1,9 +1,11 @@
-using Application.DTO;
+using Application.DTOs;
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
 using FluentAssertions;
 using FluentValidation;
+using Infrastructure;
 using Moq;
 
 namespace UnitTests.Services;
@@ -16,8 +18,10 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
-        Action test = () => new AccountService(null, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        
+        Action test = () => new AccountService(null, validator, validatorDto, hasher);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -27,8 +31,10 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
-        Action test = () => new AccountService(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        
+        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
 
         test.Should().NotThrow<NullReferenceException>();
     }
@@ -38,9 +44,10 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
         
-        Action test = () => new AccountService(repo.Object, validator, validatorDto);
+        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -50,9 +57,9 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = null as UserDTOValidator;
-        
-        Action test = () => new AccountService(repo.Object, validator, null);
+        var hasher = new PasswordHasher();
+
+        Action test = () => new AccountService(repo.Object, validator, null, hasher);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -61,9 +68,10 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = new UserDTOValidator();
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
 
-        Action test = () => new AccountService(repo.Object, validator, validatorDto);
+        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
 
         test.Should().NotThrow<NullReferenceException>();
     }
@@ -76,8 +84,9 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
         
         Action test = () => service.Create(null);
 
@@ -89,10 +98,11 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO
+        var user = new RegisterRequest
         {
             username = "test",
             password = "test",
@@ -108,10 +118,11 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO
+        var user = new RegisterRequest
         {
             username = "test",
             password = "test",
@@ -127,10 +138,11 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = new UserValidator();
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO
+        var user = new RegisterRequest
         {
             username = "test",
             password = "test",
@@ -146,10 +158,12 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO
+        var user = new RegisterRequest
         {
             username = "test",
             password = "test",
@@ -167,10 +181,12 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO()
+        var user = new RegisterRequest()
         {
             username = "test",
             password = password,
@@ -186,10 +202,12 @@ public class AccountTests
     {
         var repo = new Mock<IAccountRepository>();
         var validator = null as UserValidator;
-        var validatorDto = new UserDTOValidator();
-        AccountService service = new(repo.Object, validator, validatorDto);
+        var validatorDto = new CreateAccountValidator();
+        var hasher = new PasswordHasher();
+        
+        AccountService service = new(repo.Object, validator, validatorDto, hasher);
 
-        var user = new UserDTO()
+        var user = new RegisterRequest()
         {
             username = "test",
             password = "thisisavalidpassword",

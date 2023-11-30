@@ -17,7 +17,7 @@ public class DatabaseContext : DbContext
     {
         //Setting Primary Keys
         modelBuilder.Entity<User>()
-            .HasKey(x => x.id)
+            .HasKey(x => x.Id)
             .HasName("PK_User");
     }
 
