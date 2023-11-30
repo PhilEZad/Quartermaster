@@ -13,15 +13,27 @@ namespace UnitTests.Services;
 
 public class AccountTests
 {
+    private IAccountRepository _repo;
+    private UserValidator _userValidator;
+    private RegisterRequestValidator _registerRequestValidator;
+    private PasswordHasher _passwordHasher;
+    private IMapper _mapper;
+    private Mock<IAccountRepository> repo;
+
+    public AccountTests(IAccountRepository repo, UserValidator userValidator, RegisterRequestValidator registerRequestValidator, PasswordHasher passwordHasher, IMapper mapper)
+    {
+        _repo = repo;
+        _userValidator = userValidator;
+        _registerRequestValidator = registerRequestValidator;
+        _passwordHasher = passwordHasher;
+        _mapper = mapper;
+        this.repo = new Mock<IAccountRepository>();
+    }
+
     [Fact]
     public void CreateService_WithNullRepository_ShouldThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        
-        Action test = () => new AccountService(null, validator, validatorDto, hasher);
+        Action test = () => new AccountService(null, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -29,12 +41,7 @@ public class AccountTests
     [Fact]
     public void CreateService_WithValidRepository_ShouldNotThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-
-        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
+        Action test = () => new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         test.Should().NotThrow<NullReferenceException>();
     }
@@ -42,12 +49,7 @@ public class AccountTests
     [Fact]
     public void CreateService_WithNullValidator_ShouldThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        
-        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
+        Action test = () => new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         test.Should().Throw<NullReferenceException>();
     }
@@ -55,23 +57,14 @@ public class AccountTests
     [Fact]
     public void CreateService_WithNullValidatorDTO_ShouldThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var hasher = new PasswordHasher();
-
-        Action test = () => new AccountService(repo.Object, validator, null, hasher);
+        Action test = () => new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, null);
 
         test.Should().Throw<NullReferenceException>();
     }
     [Fact]
     public void CreateService_WithValidValidators_ShouldNotThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-
-        Action test = () => new AccountService(repo.Object, validator, validatorDto, hasher);
+        Action test = () => new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         test.Should().NotThrow<NullReferenceException>();
     }
@@ -82,11 +75,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_WithNull_ShouldThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
         
         Action test = () => service.Create(null);
 
@@ -96,11 +85,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_WithValidObject_ShouldNotThrowNullReferenceException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest
         {
@@ -116,11 +101,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_Success_ShouldReturnTrue()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest
         {
@@ -136,11 +117,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_Failure_ShouldReturnFalse()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest
         {
@@ -156,12 +133,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_WithExistingUser_ShouldReturnMessage()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest
         {
@@ -179,12 +151,7 @@ public class AccountTests
     [InlineData("","Password must be at least 8 characters long")]
     public void CreateAccount_WithInvalidPassword_ShouldReturnMessage(String password, String errorMessage)
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest()
         {
@@ -200,12 +167,7 @@ public class AccountTests
     [Fact]
     public void CreateAccount_WithValidPassword_ShouldNotThrowException()
     {
-        var repo = new Mock<IAccountRepository>();
-        var validator = null as UserValidator;
-        var validatorDto = new RegisterRequestValidator();
-        var hasher = new PasswordHasher();
-        
-        AccountService service = new(repo.Object, validator, validatorDto, hasher);
+        var service = new AccountService(repo.Object, _passwordHasher, _mapper, _userValidator, _registerRequestValidator);
 
         var user = new RegisterRequest()
         {

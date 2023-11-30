@@ -16,7 +16,11 @@ public class AccountRepository : IAccountRepository
     public User Create(User user)
     {
         _context.Users.Add(user);
-        _context.SaveChanges();
-        return user;
+        int change = _context.SaveChanges();
+        
+        if (change > 0)
+            return user;
+        else
+            throw new Exception("User not created");
     }
 }

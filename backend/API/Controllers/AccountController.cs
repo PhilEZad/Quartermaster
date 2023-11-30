@@ -15,7 +15,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Create(RegisterRequest registerRequest)
+    public IActionResult Create([FromBody] RegisterRequest registerRequest)
     {
         try
         {

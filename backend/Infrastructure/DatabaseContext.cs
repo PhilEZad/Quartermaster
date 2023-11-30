@@ -19,6 +19,12 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<User>()
             .HasKey(x => x.Id)
             .HasName("PK_User");
+
+        modelBuilder.Entity<User>()
+            .Property(x => x.dateCreated)
+            .HasColumnType("datetime2");
+
+
     }
 
     public DbSet<User> Users { get; set; }

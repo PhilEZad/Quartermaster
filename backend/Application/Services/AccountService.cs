@@ -35,7 +35,7 @@ public class AccountService : IAccountService
         _accountDtoValidator = accountDtoValidator ?? throw new NullReferenceException();
     }
 
-    public Domain.User Create(RegisterRequest registerRequest)
+    public Boolean Create(RegisterRequest registerRequest)
     {
         if (registerRequest == null)
         {
@@ -57,6 +57,6 @@ public class AccountService : IAccountService
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
 
-        return returnUser;
+        return true;
     }
 }

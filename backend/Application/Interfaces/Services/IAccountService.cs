@@ -5,5 +5,5 @@ namespace Application.Interfaces.Services;
 
 public interface IAccountService
 {
-    public Domain.User Create(RegisterRequest createAccount);
+    public Boolean Create(RegisterRequest createAccount);
 }
