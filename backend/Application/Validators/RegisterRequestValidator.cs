@@ -3,10 +3,10 @@ using FluentValidation;
 
 namespace Application.Validators;
 
-public class CreateAccountValidator : AbstractValidator<RegisterRequest>
+public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
 
-        public CreateAccountValidator()
+        public RegisterRequestValidator()
         {
             RuleFor(x => x.username).NotNull().MinimumLength(3);
             RuleFor(x => x.username).MaximumLength(20).WithMessage("Username must be at most 20 characters long");

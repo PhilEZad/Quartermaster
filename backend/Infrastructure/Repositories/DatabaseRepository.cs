@@ -5,7 +5,7 @@ namespace Infrastructure.Repositories;
 
 public class DatabaseRepository : IDatabase
 {
-    private DatabaseContext _context;
+    private readonly DatabaseContext _context;
     
     public DatabaseRepository(DatabaseContext context)
     {

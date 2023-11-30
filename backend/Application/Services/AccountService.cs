@@ -2,6 +2,7 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
+using AutoMapper;
 using Domain;
 using FluentValidation;
 
@@ -11,23 +12,30 @@ namespace Application.Services;
 public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly UserValidator _userValidator;
-    private readonly CreateAccountValidator _accountDtoValidator;
-    private readonly IPasswordHasher _passwordHasher;
     
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IMapper _mapper;
+    
+    private readonly UserValidator _userValidator;
+    private readonly RegisterRequestValidator _accountDtoValidator;
+
     public AccountService(
         IAccountRepository accountRepository,
+        IPasswordHasher passwordHasher,
+        IMapper mapper,
         UserValidator userValidator,
-        CreateAccountValidator accountDtoValidator,
-        IPasswordHasher passwordHasher)
+        RegisterRequestValidator accountDtoValidator)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException();
+        
+        _mapper = mapper ?? throw new NullReferenceException();
+        _passwordHasher = passwordHasher ?? throw new NullReferenceException();
+        
         _userValidator = userValidator ?? throw new NullReferenceException();
         _accountDtoValidator = accountDtoValidator ?? throw new NullReferenceException();
-        _passwordHasher = passwordHasher ?? throw new NullReferenceException();
     }
 
-    public User Create(RegisterRequest registerRequest)
+    public Domain.User Create(RegisterRequest registerRequest)
     {
         if (registerRequest == null)
         {
@@ -41,7 +49,9 @@ public class AccountService : IAccountService
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
-        User returnUser = _accountRepository.Create(registerRequest);
+        
+        
+        User returnUser = _accountRepository.Create(null);
         
         validation = _userValidator.Validate(returnUser);
         if (!validation.IsValid)

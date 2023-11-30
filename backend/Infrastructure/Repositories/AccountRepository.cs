@@ -1,5 +1,4 @@
-﻿using Application.DTOs;
-using Application.Interfaces;
+﻿
 using Application.Interfaces.Repositories;
 using Domain;
 
@@ -7,8 +6,17 @@ namespace Infrastructure.Repositories;
 
 public class AccountRepository : IAccountRepository
 {
-    public User Create(RegisterRequest createAccount)
+    private DatabaseContext _context;
+    
+    public AccountRepository(DatabaseContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+    
+    public User Create(User user)
+    {
+        _context.Users.Add(user);
+        _context.SaveChanges();
+        return user;
     }
 }

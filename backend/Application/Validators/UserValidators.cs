@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Domain;
 using FluentValidation;
+using User = Domain.User;
 
 namespace Application.Validators;
 

@@ -11,7 +11,7 @@ public class DependencyResolver
     
     {
         service.AddScoped<UserValidator>();
-        service.AddScoped<CreateAccountValidator>();
+        service.AddScoped<RegisterRequestValidator>();
         service.AddScoped<IAccountService, AccountService>();
     }
 }

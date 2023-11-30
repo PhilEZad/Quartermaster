@@ -5,6 +5,5 @@ namespace Application.Interfaces.Repositories;
 
 public interface IAccountRepository
 {
-    User Create(RegisterRequest createAccount);
-
+    User Create(User user);
 }
