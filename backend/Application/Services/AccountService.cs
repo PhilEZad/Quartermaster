@@ -15,7 +15,11 @@ public class AccountService : IAccountService
     private readonly CreateAccountValidator _accountDtoValidator;
     private readonly IPasswordHasher _passwordHasher;
     
-    public AccountService(IAccountRepository accountRepository, UserValidator userValidator, CreateAccountValidator accountDtoValidator, IPasswordHasher passwordHasher)
+    public AccountService(
+        IAccountRepository accountRepository,
+        UserValidator userValidator,
+        CreateAccountValidator accountDtoValidator,
+        IPasswordHasher passwordHasher)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException();
         _userValidator = userValidator ?? throw new NullReferenceException();
