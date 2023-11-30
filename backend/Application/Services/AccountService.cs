@@ -1,25 +1,43 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO;
+using Application.Interfaces;
+using Application.Validators;
 using Domain;
+using FluentValidation;
 
 
 namespace Application.Services;
 
 public class AccountService : IAccountService
 {
-    public readonly IAccountRepository _accountRepository;
-    public AccountService(IAccountRepository accountRepository)
+    private readonly IAccountRepository _accountRepository;
+    private readonly UserValidator _userValidator;
+    private readonly UserDTOValidator _userDTOValidator;
+    
+    public AccountService(IAccountRepository accountRepository, UserValidator userValidator, UserDTOValidator userDtoValidator)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException();
+        _userValidator = userValidator ?? throw new NullReferenceException();
+        _userDTOValidator = userDtoValidator ?? throw new NullReferenceException();
     }
 
-    public bool Create(User user)
+    public User Create(UserDTO userDto)
     {
-        if (user == null)
+        if (userDto == null)
         {
             throw new NullReferenceException();
         }
 
-        _accountRepository.create(user);
-        return true;
+        var validation = _userDTOValidator.Validate(userDto);
+
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+           User returnUser = _accountRepository.create(userDto);
+        
+        validation = _userValidator.Validate(returnUser);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+
+        return returnUser;
     }
 }

@@ -1,8 +1,9 @@
+using Application.DTO;
 using Application.Interfaces;
 using Application.Services;
-using Domain;
+using Application.Validators;
 using FluentAssertions;
-using Infrastructure.Repositories;
+using FluentValidation;
 using Moq;
 
 namespace UnitTests.Services;
@@ -11,30 +12,72 @@ namespace UnitTests.Services;
 public class AccountTests
 {
     [Fact]
-    public void CreateServiceWithNull_ShouldThrowNullReferenceException()
+    public void CreateService_WithNullRepository_ShouldThrowNullReferenceException()
     {
-        Action test = () => new AccountService(null);
+        var repo = new Mock<IAccountRepository>();
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        Action test = () => new AccountService(null, validator, validatorDto);
 
         test.Should().Throw<NullReferenceException>();
     }
     
     [Fact]
-    public void CreateServiceWithValidRepository_ShouldNotThrowNullReferenceException()
+    public void CreateService_WithValidRepository_ShouldNotThrowNullReferenceException()
     {
-        Action test = () => new AccountService(new AccountRepository());
+        var repo = new Mock<IAccountRepository>();
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        Action test = () => new AccountService(repo.Object, validator, validatorDto);
 
         test.Should().NotThrow<NullReferenceException>();
     }
     
+    [Fact]
+    public void CreateService_WithNullValidator_ShouldThrowNullReferenceException()
+    {
+        var repo = new Mock<IAccountRepository>();
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        
+        Action test = () => new AccountService(repo.Object, validator, validatorDto);
+
+        test.Should().Throw<NullReferenceException>();
+    }
+    
+    [Fact]
+    public void CreateService_WithNullValidatorDTO_ShouldThrowNullReferenceException()
+    {
+        var repo = new Mock<IAccountRepository>();
+        var validator = new UserValidator();
+        var validatorDto = null as UserDTOValidator;
+        
+        Action test = () => new AccountService(repo.Object, validator, null);
+
+        test.Should().Throw<NullReferenceException>();
+    }
+    [Fact]
+    public void CreateService_WithValidValidators_ShouldNotThrowNullReferenceException()
+    {
+        var repo = new Mock<IAccountRepository>();
+        var validator = new UserValidator();
+        var validatorDto = new UserDTOValidator();
+
+        Action test = () => new AccountService(repo.Object, validator, validatorDto);
+
+        test.Should().NotThrow<NullReferenceException>();
+    }
     /*
      * Account Creation Tests
      */
     
     [Fact]
-    public void CreateAccountWithNull_ShouldThrowNullReferenceException()
+    public void CreateAccount_WithNull_ShouldThrowNullReferenceException()
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = new UserValidator();
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
         
         Action test = () => service.Create(null);
 
@@ -42,15 +85,16 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateAccountWithValidObject_ShouldNotThrowNullReferenceException()
+    public void CreateAccount_WithValidObject_ShouldNotThrowNullReferenceException()
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = new UserValidator();
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
 
-        var user = new User
+        var user = new UserDTO
         {
-            id = 1,
-            userName = "test",
+            username = "test",
             password = "test",
         };
         
@@ -60,15 +104,16 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateAccountSuccess_ShouldReturnTrue()
+    public void CreateAccount_Success_ShouldReturnTrue()
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = new UserValidator();
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
 
-        var user = new User
+        var user = new UserDTO
         {
-            id = 1,
-            userName = "test",
+            username = "test",
             password = "test",
         };
         
@@ -78,33 +123,35 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateAccountFailure_ShouldReturnFalse()
+    public void CreateAccount_Failure_ShouldReturnFalse()
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = new UserValidator();
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
 
-        var user = new User
+        var user = new UserDTO
         {
-            id = 1,
-            userName = "test",
+            username = "test",
             password = "test",
         };
-        
+
         Action result = () => service.Create(user);
 
         result.Should().Throw<Exception>().WithMessage("Failed to create account");
     }
     
     [Fact]
-    public void CreateAccountWithExistingUser_ShouldReturnMessage()
+    public void CreateAccount_WithExistingUser_ShouldReturnMessage()
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
 
-        var user = new User
+        var user = new UserDTO
         {
-            id = 1,
-            userName = "test",
+            username = "test",
             password = "test",
         };
         
@@ -114,24 +161,43 @@ public class AccountTests
     }
     
     [Theory]
-    [InlineData(null,"Password can not be null")]
-    [InlineData("", "Password can not be empty")]
-    [InlineData("1234","Password must be more than 8 characters")]
-    public void CreateAccountWithInvalidPassword_ShouldReturnMessage(String password, String errorMessage)
+    [InlineData("1234","Password must be at least 8 characters long")]
+    [InlineData("","Password must be at least 8 characters long")]
+    public void CreateAccount_WithInvalidPassword_ShouldReturnMessage(String password, String errorMessage)
     {
         var repo = new Mock<IAccountRepository>();
-        AccountService service = new(repo.Object);
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
 
-        var user = new User
+        var user = new UserDTO()
         {
-            id = 1,
-            userName = "test",
+            username = "test",
             password = password,
         };
         
         Action result = () => service.Create(user);
 
-        result.Should().Throw<Exception>().WithMessage(errorMessage);
+        result.Should().Throw<ValidationException>().WithMessage(errorMessage);
+    }
+    
+    [Fact]
+    public void CreateAccount_WithValidPassword_ShouldNotThrowException()
+    {
+        var repo = new Mock<IAccountRepository>();
+        var validator = null as UserValidator;
+        var validatorDto = new UserDTOValidator();
+        AccountService service = new(repo.Object, validator, validatorDto);
+
+        var user = new UserDTO()
+        {
+            username = "test",
+            password = "thisisavalidpassword",
+        };
+        
+        Action result = () => service.Create(user);
+
+        result.Should().NotThrow<ValidationException>();
     }
     
     /*

@@ -1,11 +1,12 @@
-﻿using Application.Interfaces;
+﻿using Application.DTO;
+using Application.Interfaces;
 using Domain;
 
 namespace Infrastructure.Repositories;
 
 public class AccountRepository : IAccountRepository
 {
-    public User create(User user)
+    public User create(UserDTO user)
     {
         throw new NotImplementedException();
     }
