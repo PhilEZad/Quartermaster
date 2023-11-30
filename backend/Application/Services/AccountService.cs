@@ -24,15 +24,15 @@ public class AccountService : IAccountService
         IPasswordHasher passwordHasher,
         IMapper mapper,
         UserValidator userValidator,
-        RegisterRequestValidator accountDtoValidator)
+        RegisterRequestValidator registerRequestValidator)
     {
-        _accountRepository = accountRepository ?? throw new NullReferenceException();
+        _accountRepository = accountRepository ?? throw new NullReferenceException("AccountRepository is null");
         
-        _mapper = mapper ?? throw new NullReferenceException();
-        _passwordHasher = passwordHasher ?? throw new NullReferenceException();
+        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
+        _passwordHasher = passwordHasher ?? throw new NullReferenceException("PasswordHasher is null");
         
-        _userValidator = userValidator ?? throw new NullReferenceException();
-        _accountDtoValidator = accountDtoValidator ?? throw new NullReferenceException();
+        _userValidator = userValidator ?? throw new NullReferenceException("UserValidator is null");
+        _accountDtoValidator = registerRequestValidator ?? throw new NullReferenceException("RegisterRequestDtoValidator is null");
     }
 
     public Boolean Create(RegisterRequest registerRequest)
@@ -49,7 +49,7 @@ public class AccountService : IAccountService
         
         var user = _mapper.Map<User>(registerRequest);
         
-        user.HashedPassword = _passwordHasher.Hash(registerRequest.password);
+        user.HasedPassword = _passwordHasher.Hash(registerRequest.password);
 
         User returnUser = _accountRepository.Create(user);
         

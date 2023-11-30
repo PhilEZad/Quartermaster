@@ -21,7 +21,7 @@ public class DatabaseContext : DbContext
             .HasName("PK_User");
 
         modelBuilder.Entity<User>()
-            .Property(x => x.dateCreated)
+            .Property(x => x.DateCreated)
             .HasColumnType("datetime2");
 
 

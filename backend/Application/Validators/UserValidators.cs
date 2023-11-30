@@ -21,7 +21,7 @@ public class UserValidator : AbstractValidator<User>
             .MaximumLength(20).WithMessage("Username may not more 20 characters")
             .Matches("^[a-zA-Z0-9]*$").WithMessage("Username must only contain alphanumeric characters, and can not contain spaces");
 
-        RuleFor(x=> x.HashedPassword)
+        RuleFor(x=> x.HasedPassword)
             .MinimumLength(8).WithMessage("Password must be at least 8 characters long");
     }
 }
