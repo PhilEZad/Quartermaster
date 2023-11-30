@@ -42,16 +42,16 @@ public class AccountService : IAccountService
             throw new NullReferenceException();
         }
 
-        var passwordHashed = _passwordHasher.Hash(registerRequest.password);
-
         var validation = _accountDtoValidator.Validate(registerRequest);
 
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
+        var user = _mapper.Map<User>(registerRequest);
         
-        
-        User returnUser = _accountRepository.Create(null);
+        user.HashedPassword = _passwordHasher.Hash(registerRequest.password);
+
+        User returnUser = _accountRepository.Create(user);
         
         validation = _userValidator.Validate(returnUser);
         if (!validation.IsValid)

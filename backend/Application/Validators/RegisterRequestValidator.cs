@@ -13,6 +13,9 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             RuleFor(x => x.username).NotEmpty().WithMessage("Username cannot be empty");
             RuleFor(x => x.username).Matches("^[a-zA-Z0-9]*$").WithMessage("Username must only contain alphanumeric characters, and can not contain spaces");
         
+            RuleFor( x => x.email).NotEmpty().WithMessage("Email cannot be empty")
+                .EmailAddress().WithMessage("A valid email address is required");
+            
             RuleFor(x=> x.password).MinimumLength(8).WithMessage("Password must be at least 8 characters long");
         }
 }
