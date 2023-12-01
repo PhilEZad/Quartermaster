@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.Services;
 using Application.Services;
 using Application.Validators;
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.DependencyResolver;
