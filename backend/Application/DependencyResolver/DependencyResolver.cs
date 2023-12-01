@@ -15,6 +15,7 @@ public class DependencyResolver
 
         service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
+        service.AddScoped<IAuthenticationService, AuthenticationService>();
         service.AddScoped<IAccountService, AccountService>();
     }
 }

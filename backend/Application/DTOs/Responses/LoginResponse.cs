@@ -1,6 +1,6 @@
 ﻿namespace Application.DTOs.Responses;
 
-public class TokenResponse
+public class LoginResponse
 {
     public string Jwt { get; set; }
     public string Message { get; set; }
