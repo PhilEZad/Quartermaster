@@ -10,5 +10,6 @@ public class DependencyResolver
     public static void RegisterSecurityLayer(IServiceCollection service)
     {
         service.AddScoped<IJwtProvider, JwtProvider>();
+        service.AddScoped<IPasswordHasher, PasswordHasher>();
     }
 }

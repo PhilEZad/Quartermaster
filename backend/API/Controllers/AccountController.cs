@@ -22,7 +22,7 @@ public class AccountController : ControllerBase
         try
         {
             _accountService.Create(registerRequest);
-            return Ok();
+            return Ok("Account Created");
         }
         catch (Exception e)
         {

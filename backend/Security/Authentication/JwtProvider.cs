@@ -25,9 +25,6 @@ public class JwtProvider : IJwtProvider
             new(JwtRegisteredClaimNames.Name, username),
         };
 
-        
-        Console.WriteLine(_options.Secret);
-        
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_options.Secret)),
@@ -38,7 +35,7 @@ public class JwtProvider : IJwtProvider
             _options.Audience,
             claims,
             null,
-            DateTime.UtcNow.AddHours(1),
+            DateTime.UtcNow.AddHours(_options.TokenExpirationInHours),
             signingCredentials);
 
         string tokenValue = new JwtSecurityTokenHandler()

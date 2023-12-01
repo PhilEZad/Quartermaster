@@ -9,6 +9,7 @@ using FluentAssertions;
 using FluentValidation;
 using Infrastructure;
 using Moq;
+using Security;
 
 namespace UnitTests.Services;
 
