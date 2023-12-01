@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain;
 using Infrastructure.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -18,11 +20,11 @@ public class JwtProvider : IJwtProvider
         _options = options.Value;
     }
 
-    public string GenerateToken(string username, string password)
+    public string GenerateToken(User user)
     {
         var claims = new Claim[]
         {
-            new(JwtRegisteredClaimNames.Name, username),
+            new(JwtRegisteredClaimNames.Name, user.Username),
         };
 
         var signingCredentials = new SigningCredentials(

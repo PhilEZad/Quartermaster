@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Infrastructure.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Security.Authentication;

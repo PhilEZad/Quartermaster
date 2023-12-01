@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 
 namespace Security;

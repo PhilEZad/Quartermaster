@@ -1,4 +1,6 @@
-﻿namespace Application.Interfaces.Repositories;
+﻿using Domain;
+
+namespace Application.Interfaces;
 
 public interface IPasswordHasher
 {

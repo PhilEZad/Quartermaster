@@ -1,9 +1,11 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Responses;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
 using AutoMapper;
+using FluentValidation;
 
 namespace Application.Services;
 
@@ -40,6 +42,30 @@ public class AuthenticationService : IAuthenticationService
 
     public LoginResponse Login(LoginRequest loginRequest)
     {
-        throw new NotImplementedException();
+        if (loginRequest == null)
+        {
+            throw new NullReferenceException();
+        }
+        
+        var validation = _loginRequestValidator.Validate(loginRequest);
+        
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+
+        var user = _accountRepository.GetUserByUsername(loginRequest.Username);
+        
+        if (user == null)
+            throw new Exception("User not found");
+        
+        if (!_passwordHasher.Verify(user.HasedPassword, loginRequest.Password))
+            throw new Exception("Password is incorrect");
+
+        LoginResponse loginResponse = new LoginResponse
+        {
+            Jwt = _jwtProvider.GenerateToken(user),
+            Message = "Login successful"
+        };
+
+        return loginResponse;
     }
 }
