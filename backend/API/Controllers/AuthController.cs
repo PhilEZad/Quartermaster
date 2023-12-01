@@ -23,11 +23,15 @@ namespace API.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route(nameof(Login))]
-        public ActionResult<string> Login(LoginRequest dto)
+        public ActionResult<TokenResponse> Login(LoginRequest dto)
         {
             var token = _jwtProvider.GenerateToken(dto.Username, dto.Password);
 
-            return token;
+            return new TokenResponse
+            {
+                Jwt = token,
+                Message = "This is a message, woop woop"
+            };
         }
     }
 }

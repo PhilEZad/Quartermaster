@@ -2,11 +2,12 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Interfaces.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Infrastructure.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Infrastructure.Authentication;
+namespace Security.Authentication;
 
 public class JwtProvider : IJwtProvider
 {
