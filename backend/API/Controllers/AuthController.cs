@@ -2,6 +2,7 @@
 using Application.DTOs;
 using Application.DTOs.Responses;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,25 +14,28 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IJwtProvider _jwtProvider;
-        
-        public AuthController(IJwtProvider jwtProvider)
+        private readonly IAuthenticationService _authenticationService;
+
+        public AuthController(IAuthenticationService authenticationService)
         {
-            _jwtProvider = jwtProvider;
+            _authenticationService = authenticationService;
         }
-        
+
+
         [AllowAnonymous]
         [HttpPost]
         [Route(nameof(Login))]
         public ActionResult<LoginResponse> Login(LoginRequest dto)
         {
-            var token = _jwtProvider.GenerateToken(dto.Username, dto.Password);
-
-            return new LoginResponse
+            try
             {
-                Jwt = token,
-                Message = "This is a message, woop woop"
-            };
+                var response = _authenticationService.Login(dto);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message); 
+            }
         }
         
         [Authorize]

@@ -67,15 +67,32 @@ public class AuthenticationTests
         test.Should().Throw<NullReferenceException>().WithMessage("LoginResponseValidator cannot be null");
     }
     
-    
+    [Fact]
+    public void CreateService_WithNullUserValidator_NullExceptionReferenceWithMessage()
+    {
+        //Arrange
+        var setup = CreateServiceSetup()
+            .WithUserValidator(null);
+        
+        //Act
+        Action test = () => setup.CreateService();
+        
+        //Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("UserValidator cannot be null");
+    }
+    /*
+     * Helper Class /w methods for Tests Setup
+     */
     private ServiceSetup CreateServiceSetup()
     {
         var repoMock = new Mock<IAccountRepository>();
+        var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
+        
         var loginRequestValidators = new LoginRequestValidators();
         var loginResponseValidators = new LoginResponseValidators();
-        var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
+        var userValidator = new UserValidator();
 
-        return new ServiceSetup(repoMock, mapper, loginRequestValidators, loginResponseValidators);
+        return new ServiceSetup(repoMock, mapper, loginRequestValidators, loginResponseValidators, userValidator);
     }
     
     private class ServiceSetup
@@ -85,13 +102,15 @@ public class AuthenticationTests
         
         private LoginRequestValidators _loginRequestValidator;
         private LoginResponseValidators _loginResponseValidator;
+        private UserValidator _userValidator;
 
         public ServiceSetup(
             Mock<IAccountRepository> repositoryMock,
             IMapper mapper,
             
             LoginRequestValidators loginRequestValidators,
-            LoginResponseValidators loginResponseValidators
+            LoginResponseValidators loginResponseValidators,
+            UserValidator userValidator
         )
         {
             _repository = repositoryMock.Object;
@@ -99,6 +118,7 @@ public class AuthenticationTests
             
             _loginRequestValidator = loginRequestValidators;
             _loginResponseValidator = loginResponseValidators;
+            _userValidator = userValidator;
         }
 
         public ServiceSetup WithAccountRepository(IAccountRepository repositoryMock)
@@ -124,15 +144,21 @@ public class AuthenticationTests
             _loginResponseValidator = loginResponseValidators;
             return this;
         }
-
-
+        
+        public ServiceSetup WithUserValidator(UserValidator userValidator)
+        {
+            _userValidator = userValidator;
+            return this;
+        }
+        
         public AuthenticationService CreateService()
         {
             return new AuthenticationService(
                 _accountRepository,
                 _mapper,
                 _loginRequestValidator,
-                _loginResponseValidator
+                _loginResponseValidator,
+                _userValidator
             );
         }
     }
