@@ -33,5 +33,14 @@ namespace API.Controllers
                 Message = "This is a message, woop woop"
             };
         }
+        
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Boop))]
+        public ActionResult<string> Boop()
+        {
+            return "Boop";
+        }
     }
+
 }

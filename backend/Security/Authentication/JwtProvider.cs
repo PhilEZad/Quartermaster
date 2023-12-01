@@ -25,6 +25,9 @@ public class JwtProvider : IJwtProvider
             new(JwtRegisteredClaimNames.Name, username),
         };
 
+        
+        Console.WriteLine(_options.Secret);
+        
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_options.Secret)),
