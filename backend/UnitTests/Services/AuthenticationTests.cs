@@ -1,9 +1,9 @@
 ﻿using Application.Helpers;
 using Application.Interfaces.Repositories;
+using Application.Services;
 using Application.Validators;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.AspNetCore.Authentication;
 using Moq;
 
 namespace UnitTests.Services;
@@ -22,7 +22,7 @@ public class AuthenticationTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("AccountRepository cannot be null");
+        test.Should().Throw<NullReferenceException>().WithMessage("AccountRepository is null");
     }
     
     [Fact]
@@ -36,7 +36,7 @@ public class AuthenticationTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("Mapper cannot be null");
+        test.Should().Throw<NullReferenceException>().WithMessage("Mapper is null");
     }
     
     [Fact]
@@ -50,7 +50,7 @@ public class AuthenticationTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("LoginRequestValidator cannot be null");
+        test.Should().Throw<NullReferenceException>().WithMessage("LoginRequestValidator is null");
     }
     
     [Fact]
@@ -64,7 +64,7 @@ public class AuthenticationTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("LoginResponseValidator cannot be null");
+        test.Should().Throw<NullReferenceException>().WithMessage("LoginResponseValidator is null");
     }
     
     [Fact]
@@ -78,7 +78,7 @@ public class AuthenticationTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UserValidator cannot be null");
+        test.Should().Throw<NullReferenceException>().WithMessage("UserValidator is null");
     }
     /*
      * Helper Class /w methods for Tests Setup
@@ -97,7 +97,7 @@ public class AuthenticationTests
     
     private class ServiceSetup
     {
-        private IAccountRepository _repository;
+        private IAccountRepository _accountRepository;
         private IMapper _mapper;
         
         private LoginRequestValidators _loginRequestValidator;
@@ -113,7 +113,7 @@ public class AuthenticationTests
             UserValidator userValidator
         )
         {
-            _repository = repositoryMock.Object;
+            _accountRepository = repositoryMock.Object;
             _mapper = mapper;
             
             _loginRequestValidator = loginRequestValidators;
@@ -123,7 +123,7 @@ public class AuthenticationTests
 
         public ServiceSetup WithAccountRepository(IAccountRepository repositoryMock)
         {
-            _repository = repositoryMock;
+            _accountRepository = repositoryMock;
             return this;
         }
 
