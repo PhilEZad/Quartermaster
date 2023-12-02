@@ -129,6 +129,21 @@ public class AuthenticationTests
     
     // Login Tests
     
+    [Fact]
+    public void Login_WithNullLoginRequest_NullExceptionReferenceWithMessage()
+    {
+        //Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        //Act
+        Action test = () => service.Login(null);
+        
+        //Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Value cannot be null. (Parameter 'loginRequest')");
+    }
+    
+    
     /*
      * Helper Class /w methods for Tests Setup
      */

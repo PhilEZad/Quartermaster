@@ -44,7 +44,7 @@ public class AuthenticationService : IAuthenticationService
     {
         if (loginRequest == null)
         {
-            throw new NullReferenceException();
+            throw new NullReferenceException("Login Request is null");
         }
         
         var validation = _loginRequestValidator.Validate(loginRequest);
@@ -60,6 +60,11 @@ public class AuthenticationService : IAuthenticationService
         if (!_passwordHasher.Verify(user.HasedPassword, loginRequest.Password))
             throw new Exception("Password is incorrect");
 
+        var validationUser = _userValidator.Validate(user);
+        
+        if (!validationUser.IsValid)
+            throw new ValidationException(validationUser.ToString());
+        
         LoginResponse loginResponse = new LoginResponse
         {
             Jwt = _jwtProvider.GenerateToken(user),
