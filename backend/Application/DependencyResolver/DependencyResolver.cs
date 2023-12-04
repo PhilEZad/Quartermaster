@@ -15,6 +15,9 @@ public class DependencyResolver
         service.AddScoped<RegisterRequestValidator>();
         service.AddScoped<LoginRequestValidators>();
         service.AddScoped<LoginResponseValidators>();
+        service.AddScoped<FactionValidator>();
+        service.AddScoped<FactionRequestValidators>();
+        service.AddScoped<FactionResponseValidators>();
 
         service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         

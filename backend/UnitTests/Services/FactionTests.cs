@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
+using Application.Validators;
 using AutoMapper;
 using Domain;
 using FluentAssertions;
@@ -19,7 +20,7 @@ public class FactionTests
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithFactionRepository(null);
+            .WithRepository(null);
         
         //Act
         Action test = () => setup.CreateService();
@@ -47,13 +48,13 @@ public class FactionTests
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithFactionRequestValidator(null);
+            .WithRequestValidator(null);
         
         //Act
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionRequestValidator is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("FactionRequestValidators is null");
     }
     
     [Fact]
@@ -61,13 +62,13 @@ public class FactionTests
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithFactionResponseValidator(null);
+            .WithResponseValidator(null);
         
         //Act
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionResponseValidator is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("FactionResponseValidators is null");
     }
     
     [Fact]
@@ -75,13 +76,13 @@ public class FactionTests
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithFactionValidator(null);
+            .WithValidator(null);
         
         //Act
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionValidator is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("FactionValidators is null");
     }
     
     [Fact]
@@ -102,7 +103,7 @@ public class FactionTests
      */
     private ServiceSetup CreateServiceSetup()
     {
-        var repoMock = new Mock<IAccountRepository>();
+        var repoMock = new Mock<IFactionRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
         var factionRequestValidators = new FactionRequestValidators();
@@ -114,7 +115,7 @@ public class FactionTests
     
     private class ServiceSetup
     {
-        private IAccountRepository _accountRepository;
+        private IFactionRepository _factionRepository;
         private IMapper _mapper;
 
         private FactionRequestValidators _factionRequestValidator;
@@ -124,14 +125,13 @@ public class FactionTests
         public ServiceSetup(
             Mock<IFactionRepository> repositoryMock,
             IMapper mapper,
-            IJwtProvider jwtProvider,
 
             FactionRequestValidators factionRequestValidators,
             FactionResponseValidators factionResponseValidators,
-            Faction factionValidator
+            FactionValidator factionValidator
         )
         {
-            _accountRepository = repositoryMock.Object;
+            _factionRepository = repositoryMock.Object;
             _mapper = mapper;
 
             _factionRequestValidator = factionRequestValidators;
@@ -139,9 +139,9 @@ public class FactionTests
             _factionValidator = factionValidator;
         }
 
-        public ServiceSetup WithAccountRepository(IFactionService repositoryMock)
+        public ServiceSetup WithRepository(IFactionRepository repositoryMock)
         {
-            _accountRepository = repositoryMock;
+            _factionRepository = repositoryMock;
             return this;
         }
 
@@ -151,19 +151,19 @@ public class FactionTests
             return this;
         }
 
-        public ServiceSetup WithLoginRequestValidator(FactionRequestValidators loginRequestValidators)
+        public ServiceSetup WithRequestValidator(FactionRequestValidators loginRequestValidators)
         {
             _factionRequestValidator = loginRequestValidators;
             return this;
         }
         
-        public ServiceSetup WithLoginResponseValidator(FactionResponseValidators loginResponseValidators)
+        public ServiceSetup WithResponseValidator(FactionResponseValidators loginResponseValidators)
         {
             _factionResponseValidator = loginResponseValidators;
             return this;
         }
         
-        public ServiceSetup WithUserValidator(FactionValidator userValidator)
+        public ServiceSetup WithValidator(FactionValidator userValidator)
         {
             _factionValidator = userValidator;
             return this;
@@ -174,9 +174,9 @@ public class FactionTests
             return new FactionService(
                 _factionRepository,
                 _mapper,
+                _factionValidator,
                 _factionRequestValidator,
-                _factionResponseValidator,
-                _factionValidator
+                _factionResponseValidator
             );
         }
     }

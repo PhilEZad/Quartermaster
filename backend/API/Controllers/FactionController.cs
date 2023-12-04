@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Interfaces.Repositories;
+using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -21,35 +16,34 @@ namespace API.Controllers
         {
             _factionService = factionService ?? throw new NullReferenceException();
         }
-
-        [Authorize]
+        
+        [AllowAnonymous]
         [HttpGet]
         [Route(nameof(GetAllFactions))]
-        public ActionResult<Faction[]> GetAllFactions()
+        public ActionResult<List<Faction>> GetAllFactions()
         {
             try
             {
-                Faction[] factionList = _factionService.GetAllFactions();
+                var factionList = _factionService.GetAllFactions();
                 return Ok(factionList);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
-
-        [Authorize]
+        
         [HttpGet]
         [Route(nameof(GetFactionById))]
-        public ActionResult<Faction> GetFactionById([FromBody] int id)
+        public ActionResult<Faction> GetFactionById([FromBody] FactionRequest id)
         {
             try
             {
-                Faction faction = _factionService.GetFactionById(id);
-                return Ok(faction);
+                var factionReturn = _factionService.GetFactionById(id.Id);
+                return Ok(factionReturn);
             } catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
         
@@ -60,12 +54,12 @@ namespace API.Controllers
         {
             try
             {
-                Faction factionReturn = _factionService.CreateFaction(faction);
-                return Ok(faction);
+                var factionReturn = _factionService.CreateFaction(faction);
+                return Ok(factionReturn);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
         
@@ -76,12 +70,12 @@ namespace API.Controllers
         {
             try
             {
-                Faction factionReturn = _factionService.UpdateFaction(faction);
+                var factionReturn = _factionService.UpdateFaction(faction);
                 return Ok(factionReturn);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
         
@@ -92,12 +86,12 @@ namespace API.Controllers
         {
             try
             {
-                Boolean response = _factionService.DeleteFaction(faction);
+                var response = _factionService.DeleteFaction(faction);
                 return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
     }

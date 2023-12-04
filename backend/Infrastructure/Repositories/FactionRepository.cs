@@ -10,7 +10,7 @@ public class FactionRepository : IFactionRepository
         throw new NotImplementedException();
     }
 
-    public Faction[] GetAllFactions()
+    public List<Faction> GetAllFactions()
     {
         throw new NotImplementedException();
     }
