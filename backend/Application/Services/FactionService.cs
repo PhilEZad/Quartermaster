@@ -89,11 +89,43 @@ public class FactionService : IFactionService
 
     public Faction UpdateFaction(Faction faction)
     {
-        throw new NotImplementedException();
+        if (faction == null)
+            throw new NullReferenceException("Faction is null");
+        
+        var validation = _validators.Validate(faction);
+        
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        var updatedFaction = _factionRepository.UpdateFaction(faction);
+        
+        if (updatedFaction == null)
+            throw new Exception("Faction could not be updated");
+        
+        var validatedFaction = _validators.Validate(updatedFaction);
+        
+        if (validatedFaction.IsValid)
+            throw new ValidationException(validatedFaction.ToString());
+        
+        return updatedFaction;
+        
     }
 
     public bool DeleteFaction(Faction faction)
     {
-        throw new NotImplementedException();
+        if (faction == null)
+            throw new NullReferenceException("Faction is null");
+        
+        var validation = _validators.Validate(faction);
+        
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        var deletedFaction = _factionRepository.DeleteFaction(faction);
+        
+        if (!deletedFaction)
+            throw new Exception("Faction could not be deleted");
+        
+        return deletedFaction;
     }
 }

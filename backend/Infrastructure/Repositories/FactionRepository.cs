@@ -1,11 +1,12 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class FactionRepository : IFactionRepository
 {
-    DatabaseContext _context;
+    private readonly DatabaseContext _context;
 
     public FactionRepository(DatabaseContext context)
     {
@@ -25,16 +26,24 @@ public class FactionRepository : IFactionRepository
 
     public Faction GetFactionById(int id)
     {
-        throw new NotImplementedException();
+        return _context.Factions.Find(id);
     }
 
     public Faction UpdateFaction(Faction faction)
     {
-        throw new NotImplementedException();
+        _context.Factions.Update(faction);
+        var change = _context.SaveChanges();
+        
+        if (change == 0)
+            throw new Exception("Faction could not be updated");
+        
+        return faction;
     }
 
     public bool DeleteFaction(Faction faction)
     {
-        throw new NotImplementedException();
+        _context.Factions.Remove(faction);
+        var change =_context.SaveChanges();
+        return change > 0;
     }
 }
