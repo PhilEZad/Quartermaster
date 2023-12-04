@@ -16,6 +16,8 @@ public class FactionRepository : IFactionRepository
     public Faction CreateFaction(Faction faction)
     {
         _context.Factions.Add(faction);
+        _context.SaveChanges();
+        
         return faction;
     }
 

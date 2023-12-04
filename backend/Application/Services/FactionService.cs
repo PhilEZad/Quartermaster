@@ -53,7 +53,7 @@ public class FactionService : IFactionService
         
         var validatedFaction = _validators.Validate(createdFaction);
         
-        if (validatedFaction.IsValid)
+        if (!validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
         
         return createdFaction;
@@ -97,6 +97,7 @@ public class FactionService : IFactionService
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
+        
         var updatedFaction = _factionRepository.UpdateFaction(faction);
         
         if (updatedFaction == null)
@@ -126,6 +127,6 @@ public class FactionService : IFactionService
         if (!deletedFaction)
             throw new Exception("Faction could not be deleted");
         
-        return deletedFaction;
+        return true;
     }
 }

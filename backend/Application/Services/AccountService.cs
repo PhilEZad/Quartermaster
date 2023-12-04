@@ -40,7 +40,7 @@ public class AccountService : IAccountService
     {
         if (registerRequest == null)
         {
-            throw new NullReferenceException();
+            throw new NullReferenceException("Register Request is null");
         }
 
         var validation = _accountDtoValidator.Validate(registerRequest);

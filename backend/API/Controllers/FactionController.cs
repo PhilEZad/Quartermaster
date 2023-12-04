@@ -82,12 +82,12 @@ namespace API.Controllers
         [Authorize]
         [HttpDelete]
         [Route(nameof(DeleteFaction))]
-        public ActionResult<Boolean> DeleteFaction([FromBody] Faction faction)
+        public ActionResult DeleteFaction([FromBody] Faction faction)
         {
             try
             {
-                var response = _factionService.DeleteFaction(faction);
-                return Ok(response);
+                _factionService.DeleteFaction(faction);
+                return Ok("Faction deleted");
             }
             catch (Exception e)
             {
