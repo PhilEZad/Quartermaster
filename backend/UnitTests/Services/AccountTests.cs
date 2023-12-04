@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.Helpers;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
@@ -9,6 +10,7 @@ using FluentAssertions;
 using FluentValidation;
 using Infrastructure;
 using Moq;
+using Security;
 
 namespace UnitTests.Services;
 

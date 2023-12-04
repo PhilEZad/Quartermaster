@@ -18,14 +18,18 @@ public class AccountRepository : IAccountRepository
         _context.Users.Add(user);
         int change = _context.SaveChanges();
         
-        if (change > 0)
-            return user;
-        else
-            throw new Exception("User not created");
+        return user;
     }
 
     public bool DoesUserExist(string username)
     {
         return _context.Users.Any(u => u.Username == username);
+    }
+
+    public User GetUserByUsername(string loginRequestUsername)
+    {
+        var returnUser = _context.Users.FirstOrDefault(u => u.Username == loginRequestUsername);
+        
+        return returnUser;
     }
 }

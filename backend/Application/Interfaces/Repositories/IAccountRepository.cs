@@ -7,4 +7,5 @@ public interface IAccountRepository
 {
     User Create(User user);
     Boolean DoesUserExist(string username);
+    User GetUserByUsername(string loginRequestUsername);
 }
