@@ -19,7 +19,7 @@ namespace API.Controllers
 
         public FactionController(IFactionService factionService)
         {
-            _factionService = factionService;
+            _factionService = factionService ?? throw new NullReferenceException();
         }
 
         [Authorize]
@@ -30,73 +30,74 @@ namespace API.Controllers
             try
             {
                 Faction[] factionList = _factionService.GetAllFactions();
-                Ok(factionList);
+                return Ok(factionList);
             }
             catch (Exception e)
             {
-                BadRequest(e);
+                return BadRequest(e);
             }
         }
 
         [Authorize]
         [HttpGet]
         [Route(nameof(GetFactionById))]
+        public ActionResult<Faction> GetFactionById([FromBody] int id)
         {
             try
             {
                 Faction faction = _factionService.GetFactionById(id);
-                Ok(faction);
+                return Ok(faction);
             } catch (Exception e)
             {
-                BadRequest(e);
+                return BadRequest(e);
             }
         }
         
         [Authorize]
         [HttpPost]
         [Route(nameof(CreateFaction))]
-        public ActionResult<Faction> CreateFaction(Faction faction)
+        public ActionResult<Faction> CreateFaction([FromBody] Faction faction)
         {
             try
             {
-                Faction faction = _factionService.CreateFaction(faction);
-                Ok(faction);
+                Faction factionReturn = _factionService.CreateFaction(faction);
+                return Ok(faction);
             }
             catch (Exception e)
             {
-                BadRequest(e);
+                return BadRequest(e);
             }
         }
         
         [Authorize]
         [HttpPut]
         [Route(nameof(UpdateFaction))]
-        public ActionResult<Faction> UpdateFaction(Faction faction)
+        public ActionResult<Faction> UpdateFaction([FromBody] Faction faction)
         {
             try
             {
-                Faction faction = _factionService.UpdateFaction(faction);
-                Ok(faction);
+                Faction factionReturn = _factionService.UpdateFaction(faction);
+                return Ok(factionReturn);
             }
             catch (Exception e)
             {
-                BadRequest(e);
+                return BadRequest(e);
             }
         }
         
         [Authorize]
         [HttpDelete]
         [Route(nameof(DeleteFaction))]
-        public ActionResult<Boolean> DeleteFaction(int id)
+        public ActionResult<Boolean> DeleteFaction([FromBody] Faction faction)
         {
             try
             {
-                Boolean faction = _factionService.DeleteFaction(id);
-                Ok(faction);
+                Boolean response = _factionService.DeleteFaction(faction);
+                return Ok(response);
             }
             catch (Exception e)
             {
-                BadRequest(e);
+                return BadRequest(e);
             }
         }
     }

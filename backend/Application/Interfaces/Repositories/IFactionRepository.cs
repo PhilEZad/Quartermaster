@@ -1,8 +1,8 @@
 ﻿using Domain;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.Repositories;
 
-public interface IFactionService
+public interface IFactionRepository
 {
     public Faction CreateFaction(Faction faction);
     public Faction[] GetAllFactions();

@@ -1,9 +1,9 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Interfaces.Repositories;
 using Domain;
 
-namespace Application.Services;
+namespace Infrastructure.Repositories;
 
-public class FactionService : IFactionService
+public class FactionRepository : IFactionRepository
 {
     public Faction CreateFaction(Faction faction)
     {
