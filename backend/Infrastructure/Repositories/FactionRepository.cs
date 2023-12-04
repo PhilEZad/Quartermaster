@@ -5,6 +5,13 @@ namespace Infrastructure.Repositories;
 
 public class FactionRepository : IFactionRepository
 {
+    DatabaseContext _context;
+
+    public FactionRepository(DatabaseContext context)
+    {
+        _context = context;
+    }
+
     public Faction CreateFaction(Faction faction)
     {
         throw new NotImplementedException();
@@ -12,7 +19,7 @@ public class FactionRepository : IFactionRepository
 
     public List<Faction> GetAllFactions()
     {
-        throw new NotImplementedException();
+        return _context.Factions.ToList();
     }
 
     public Faction GetFactionById(int id)

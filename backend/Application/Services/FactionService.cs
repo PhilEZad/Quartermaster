@@ -39,7 +39,12 @@ public class FactionService : IFactionService
 
     public List<Faction> GetAllFactions()
     {
-        throw new NotImplementedException();
+        List<Faction> factionList = _factionRepository.GetAllFactions();
+        
+        if (factionList == null)
+            throw new Exception("No factions found");
+        
+        return factionList;
     }
 
     public Faction GetFactionById(int id)
