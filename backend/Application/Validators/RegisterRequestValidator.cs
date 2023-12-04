@@ -14,6 +14,7 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
                 .Matches("^[a-zA-Z0-9]*$").WithMessage("Username must only contain alphanumeric characters, and can not contain spaces");
 
             RuleFor( x => x.email)
+                .NotNull().WithMessage("Email cannot be null")
                 .NotEmpty().WithMessage("Email cannot be empty")
                 .EmailAddress().WithMessage("A valid email address is required");
             

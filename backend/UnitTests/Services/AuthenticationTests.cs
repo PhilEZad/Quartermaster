@@ -1,10 +1,12 @@
-﻿using Application.Helpers;
+﻿using Application.DTOs;
+using Application.Helpers;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
 using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using Infrastructure.Authentication;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -140,9 +142,31 @@ public class AuthenticationTests
         Action test = () => service.Login(null);
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("Value cannot be null. (Parameter 'loginRequest')");
+        test.Should().Throw<NullReferenceException>().WithMessage("Login Request is null");
     }
     
+    [Theory]
+    [InlineData("", "Username can not be empty")]
+    [InlineData("abc", "Username must be at least 3 characters long")]
+    [InlineData("thisusernameismorethan20characterslong", "Username may not more 20 characters")]
+    [InlineData("Мойдомашнийпитомец", "Username must only contain alphanumeric characters, and can not contain spaces")]
+    [InlineData("space space space", "Username must only contain alphanumeric characters, and can not contain spaces")]
+    public void Login_WithInvalidUsername_ShouldThrowValidationExceptionWithMessage(string username, string message)
+    {
+        //Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        //Act
+        Action test = () => service.Login(new LoginRequest
+        {
+            Username = username,
+            Password = "12345678"
+        });
+        
+        //Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
     
     /*
      * Helper Class /w methods for Tests Setup
