@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Application.Services;
 using Application.Validators;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public class DependencyResolver
 
         service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
+        service.AddScoped<IFactionService, FactionService>();
         service.AddScoped<IAuthenticationService, AuthenticationService>();
         service.AddScoped<IAccountService, AccountService>();
     }
