@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.DTOs;
+using Application.Helpers;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -7,6 +8,7 @@ using Application.Validators;
 using AutoMapper;
 using Domain;
 using FluentAssertions;
+using FluentValidation;
 using Moq;
 
 namespace UnitTests.Services;
@@ -16,7 +18,7 @@ public class FactionTests
     // Service Creation Tests
     
     [Fact]
-    public void CreateService_WithNullFactionRepository_NullExceptionReferenceWithMessage()
+    public void CreateService_WithNullFactionRepository_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -30,7 +32,7 @@ public class FactionTests
     }
     
     [Fact]
-    public void CreateService_WithNullMapper_NullExceptionReferenceWithMessage()
+    public void CreateService_WithNullMapper_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -44,7 +46,7 @@ public class FactionTests
     }
     
     [Fact]
-    public void CreateService_WithNullFactionRequestValidator_NullExceptionReferenceWithMessage()
+    public void CreateService_WithNullFactionRequestValidator_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -58,7 +60,7 @@ public class FactionTests
     }
     
     [Fact]
-    public void CreateService_WithNullFactionResponseValidator_NullExceptionReferenceWithMessage()
+    public void CreateService_WithNullFactionResponseValidator_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -72,7 +74,7 @@ public class FactionTests
     }
     
     [Fact]
-    public void CreateService_WithNullFactionValidator_NullExceptionReferenceWithMessage()
+    public void CreateService_WithNullFactionValidator_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -96,6 +98,91 @@ public class FactionTests
         
         //Assert
         service.Should().NotBeNull();
+    }
+    
+    /*
+     * CreateFaction Tests
+     */
+    
+    [Fact]
+    public void CreateFaction_WithNullFactionRequest_ShouldThrowNullExceptionReferenceWithMessage()
+    {
+        //Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        //Act
+        Action test = () => service.CreateFaction(null);
+        
+        //Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("FactionRequest is null");
+    }
+    
+    [Theory]
+    [InlineData("", "Name is required")]
+    [InlineData(" ", "Name is required")]
+    [InlineData(null, "Name is required")]
+    [InlineData("This is a test name that is way too long for the validation", "Name must be between 1 and 50 characters")]
+    [InlineData("Тестовое сообщение", "Faction name must only contain alphanumeric characters")]
+    public void CreateFaction_WithInvalidFactionRequestName_ShouldThrowValidationExceptionWithMessage(string TestName, string ErrorMessage)
+    {
+        //Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        var factionRequest = new FactionRequest
+        {
+            Name = TestName,
+            Description = "This is an example of a test faction",
+        };
+        
+        //Act
+        Action test = () => service.CreateFaction(factionRequest);
+        
+        //Assert
+        test.Should().Throw<ValidationException>().WithMessage(ErrorMessage);
+    }
+
+    [Fact]
+    public void CreateFaction_WithInvalidFactionRequestDescription_ShouldThrowValicationExceptionWithMessage()
+    {
+        //Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        //Act
+        Action test = () => service.CreateFaction(new FactionRequest
+        {
+            Name = "Test Faction",
+            Description = null
+        });
+        
+        //Assert
+        test.Should().Throw<ValidationException>().WithMessage("Description is null");
+    }
+    
+    [Fact]
+    public void CreateFaction_WithNullReturnFaction_ShouldThrowNullReferenceErrorWithMessage()
+    {
+        //Arrange
+        var repoMock = new Mock<IFactionRepository>();
+        
+        var setup = CreateServiceSetup().WithRepository(repoMock.Object);
+
+        repoMock.Setup(x => x.CreateFaction(
+            It.IsAny<Faction>())).Returns((Faction)null);
+        
+        var service = setup.CreateService();
+
+        //Act
+        Action test = () => service.CreateFaction(new FactionRequest
+        {
+            Name = "Test Faction",
+            Description = "This is an example of a test faction"
+        });
+        
+        //Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Return Faction is null");
     }
     
     /*
