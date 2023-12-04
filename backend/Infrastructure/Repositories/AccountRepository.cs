@@ -16,8 +16,7 @@ public class AccountRepository : IAccountRepository
     public User Create(User user)
     {
         _context.Users.Add(user);
-        int change = _context.SaveChanges();
-        
+
         return user;
     }
 

@@ -35,11 +35,11 @@ namespace API.Controllers
         
         [HttpGet]
         [Route(nameof(GetFactionById))]
-        public ActionResult<Faction> GetFactionById([FromBody] FactionRequest id)
+        public ActionResult<Faction> GetFactionById([FromBody] int id)
         {
             try
             {
-                var factionReturn = _factionService.GetFactionById(id.Id);
+                var factionReturn = _factionService.GetFactionById(id);
                 return Ok(factionReturn);
             } catch (Exception e)
             {
@@ -50,11 +50,11 @@ namespace API.Controllers
         [Authorize]
         [HttpPost]
         [Route(nameof(CreateFaction))]
-        public ActionResult<Faction> CreateFaction([FromBody] Faction faction)
+        public ActionResult<Faction> CreateFaction([FromBody] FactionRequest factionRequest)
         {
             try
             {
-                var factionReturn = _factionService.CreateFaction(faction);
+                var factionReturn = _factionService.CreateFaction(factionRequest);
                 return Ok(factionReturn);
             }
             catch (Exception e)

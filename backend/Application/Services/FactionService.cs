@@ -1,8 +1,10 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 
 namespace Application.Services;
 
@@ -32,16 +34,36 @@ public class FactionService : IFactionService
        _responseValidators = responseValidators ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
     
-    public Faction CreateFaction(Faction faction)
+    public Faction CreateFaction(FactionRequest factionRequest)
     {
-        throw new NotImplementedException();
+        if (factionRequest == null)
+            throw new NullReferenceException("FactionRequest is null");
+        
+        var validation = _requestValidators.Validate(factionRequest);
+        
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        var faction = _mapper.Map<Faction>(factionRequest);
+        
+        var createdFaction = _factionRepository.CreateFaction(faction);
+        
+        if (createdFaction == null)
+            throw new Exception("Faction could not be created");
+        
+        var validatedFaction = _validators.Validate(createdFaction);
+        
+        if (validatedFaction.IsValid)
+            throw new ValidationException(validatedFaction.ToString());
+        
+        return createdFaction;
     }
 
     public List<Faction> GetAllFactions()
     {
         List<Faction> factionList = _factionRepository.GetAllFactions();
         
-        if (factionList == null)
+        if (factionList == null || factionList.Count == 0)
             throw new Exception("No factions found");
         
         return factionList;
@@ -49,7 +71,20 @@ public class FactionService : IFactionService
 
     public Faction GetFactionById(int id)
     {
-        throw new NotImplementedException();
+        if (id <= 0)
+            throw new Exception("Id is invalid");
+        
+        Faction faction = _factionRepository.GetFactionById(id);
+        
+        if (faction == null)
+            throw new Exception("No faction found");
+        
+        var validatedFaction = _validators.Validate(faction);
+        
+        if (validatedFaction.IsValid)
+            throw new ValidationException(validatedFaction.ToString());
+        
+        return faction;
     }
 
     public Faction UpdateFaction(Faction faction)

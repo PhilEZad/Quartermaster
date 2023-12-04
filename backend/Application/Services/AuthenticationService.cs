@@ -43,10 +43,8 @@ public class AuthenticationService : IAuthenticationService
     public LoginResponse Login(LoginRequest loginRequest)
     {
         if (loginRequest == null)
-        {
             throw new NullReferenceException("Login Request is null");
-        }
-        
+
         var validation = _loginRequestValidator.Validate(loginRequest);
         
         if (!validation.IsValid)

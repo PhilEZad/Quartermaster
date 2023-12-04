@@ -14,7 +14,8 @@ public class FactionRepository : IFactionRepository
 
     public Faction CreateFaction(Faction faction)
     {
-        throw new NotImplementedException();
+        _context.Factions.Add(faction);
+        return faction;
     }
 
     public List<Faction> GetAllFactions()
