@@ -1,10 +1,11 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Responses;
 using Application.Interfaces.Repositories;
 using Domain;
 
 namespace Infrastructure.Repositories;
 
-public class AbilityRepository : IWeaponRepository
+public class AbilityRepository : IAbilityRepository
 {
     private readonly DatabaseContext _context;
     
@@ -13,32 +14,27 @@ public class AbilityRepository : IWeaponRepository
         _context = context;
     }
 
-    public Weapon Create(Weapon weapon)
+    public Ability CreateAbility(Ability request)
     {
         throw new NotImplementedException();
     }
 
-    public List<Weapon> GetAllWeapons()
+    public Ability GetAbilityById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Weapon GetWeaponById(int id)
+    public List<AbilityResponse> GetAllAbilities()
     {
         throw new NotImplementedException();
     }
 
-    public List<Weapon> GetWeaponByFactionId(int id)
+    public Ability UpdateAbility(AbilityRequest request)
     {
         throw new NotImplementedException();
     }
 
-    public Weapon Update(Weapon weapon)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Delete(WeaponRequest weapon)
+    public bool DeleteAbility(int id)
     {
         throw new NotImplementedException();
     }

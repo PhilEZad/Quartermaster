@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs.Responses;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
 using Application.Validators;
@@ -26,6 +27,10 @@ public class DependencyResolver
 
         service.AddScoped<UnitValdiator>();
         service.AddScoped<UnitRequestValidator>();
+        
+        service.AddScoped<WeaponValidator>();
+        service.AddScoped<WeaponRequestValidator>();
+        service.AddScoped<WeaponResponse>();
 
         // Services
         service.AddScoped<IFactionService, FactionService>();
@@ -33,5 +38,6 @@ public class DependencyResolver
         service.AddScoped<IAccountService, AccountService>();
         service.AddScoped<IWeaponService, WeaponService>();
         service.AddScoped<IUnitService, UnitService>();
+        service.AddScoped<IAbilityService, AbilityService>();
     }
 }
