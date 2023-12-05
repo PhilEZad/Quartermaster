@@ -24,6 +24,10 @@ public class DatabaseContext : DbContext
             .HasKey(x => x.Id)
             .HasName("PK_Faction");
         
+        modelBuilder.Entity<Unit>()
+            .HasKey(x => x.Id)
+            .HasName("PK_Unit");
+        
         modelBuilder.Entity<User>()
             .Property(x => x.DateCreated)
             .HasColumnType("datetime2");
@@ -31,6 +35,7 @@ public class DatabaseContext : DbContext
 
     }
 
+    public DbSet<Unit> Units { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Faction> Factions { get; set; }
 }
