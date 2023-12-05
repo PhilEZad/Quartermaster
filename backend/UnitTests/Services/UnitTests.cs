@@ -1,9 +1,11 @@
-﻿using Application.Helpers;
+﻿using Application.DTOs;
+using Application.Helpers;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
 using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using Moq;
 
 namespace UnitTests.Services;
@@ -80,6 +82,68 @@ public class UnitTests
         service.Should().BeOfType<UnitService>();
     }
     
+    /*
+     * CreateUnit Tests
+     */
+
+    [Fact]
+    public void CreateUnit_WithObjectAsNull_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        Action test = () => service.CreateUnit(null);
+        
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Unit is null");
+    }
+
+    [Theory]
+    [InlineData("", "Name is required")]
+    [InlineData(" ", "Name is required")]
+    [InlineData(null, "Name is required")]
+    public void CreateUnit_WithInvalidNameProperty_ShouldThrowValidationExceptionWithMessage(string name,
+        string message)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        // Act
+        Action test = () => service.CreateUnit(new UnitRequest
+        {
+            Name = name
+        });
+
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
+    
+    [Theory]
+    [InlineData("", "Faction is required")]
+    public void CreateUnit_WithValidNamePropertyAndInvalidFactionProperty_ShouldThrowValidationExceptionWithMessage(string faction,
+        string message)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        // Act
+        Action test = () => service.CreateUnit(new UnitRequest
+        {
+            Name = "Unit",
+            Faction = new Domain.Faction
+            {
+                Name = faction
+            }
+        });
+
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
+
     /*
      * Helper Class /w methods for Tests Setup
      */

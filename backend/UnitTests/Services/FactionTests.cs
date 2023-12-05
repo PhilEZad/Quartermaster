@@ -186,6 +186,18 @@ public class FactionTests
     }
     
     /*
+     * GetFaction Tests
+     */
+    
+    /*
+     * UpdateFactions Tests
+     */
+    
+    /*
+     * DeleteFaction Tests
+     */
+    
+    /*
      * Helper Class /w methods for Tests Setup
      */
     private ServiceSetup CreateServiceSetup()
