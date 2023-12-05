@@ -50,7 +50,7 @@ public class UnitTests
         Action test = () => setup.CreateService();
 
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UnitRequestValidators is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("UnitRequestValidator is null");
     }
     
     [Fact]
@@ -85,7 +85,7 @@ public class UnitTests
      */
     private ServiceSetup CreateServiceSetup()
     {
-        var repoMock = new Mock<IFactionRepository>();
+        var repoMock = new Mock<IUnitRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
         var unitRequestValidators = new UnitRequestValidator();
@@ -96,7 +96,7 @@ public class UnitTests
 
     private class ServiceSetup
     {
-        private IFactionRepository _factionRepository;
+        private IUnitRepository _factionRepository;
         private IMapper _mapper;
 
         private UnitRequestValidator _factionRequestValidator;
@@ -117,7 +117,7 @@ public class UnitTests
             _factionValidator = factionValidator;
         }
 
-        public ServiceSetup WithRepository(IFactionRepository repositoryMock)
+        public ServiceSetup WithRepository(IUnitRepository repositoryMock)
         {
             _factionRepository = repositoryMock;
             return this;
@@ -147,7 +147,7 @@ public class UnitTests
                 _factionRepository,
                 _mapper,
                 _factionValidator,
-                _factionRequestValidator,
+                _factionRequestValidator
             );
         }
     }
