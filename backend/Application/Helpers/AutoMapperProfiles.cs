@@ -9,7 +9,6 @@ public class AutoMapperProfiles : Profile
 {
     public AutoMapperProfiles()
     {
-        
         // Request to Model
         CreateMap<RegisterRequest, User>();
         CreateMap<FactionRequest, Faction>();

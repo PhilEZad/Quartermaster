@@ -11,6 +11,10 @@ public class DependencyResolver
     public static void RegisterApplicationLayer(IServiceCollection service)
     
     {
+        // Automapper
+        service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
+        // Validators
         service.AddScoped<UserValidator>();
         service.AddScoped<RegisterRequestValidator>();
         service.AddScoped<LoginRequestValidators>();
@@ -23,12 +27,11 @@ public class DependencyResolver
         service.AddScoped<UnitValdiator>();
         service.AddScoped<UnitRequestValidator>();
 
-        service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        
+        // Services
         service.AddScoped<IFactionService, FactionService>();
         service.AddScoped<IAuthenticationService, AuthenticationService>();
         service.AddScoped<IAccountService, AccountService>();
-
+        service.AddScoped<IWeaponService, WeaponService>();
         service.AddScoped<IUnitService, UnitService>();
     }
 }
