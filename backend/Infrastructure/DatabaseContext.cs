@@ -48,7 +48,7 @@ public class DatabaseContext : DbContext
 
     }
 
-    
+    public DbSet<Ability> Abilities { get; set; }
     public DbSet<Weapon> Weapons { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<User> Users { get; set; }
