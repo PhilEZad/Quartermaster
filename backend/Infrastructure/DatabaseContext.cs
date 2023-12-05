@@ -32,6 +32,10 @@ public class DatabaseContext : DbContext
             .HasKey(x => x.Id)
             .HasName("PK_Weapon");
         
+        modelBuilder.Entity<Ability>()
+            .HasKey(x => x.Id)
+            .HasName("PK_Ability");
+        
         // Setting Foreign Keys
         
         // Setting Relationships
@@ -48,6 +52,8 @@ public class DatabaseContext : DbContext
 
     }
 
+    public DbSet<Model> Models { get; set; }
+    public DbSet<Wargear> Wargear { get; set; }
     public DbSet<Ability> Abilities { get; set; }
     public DbSet<Weapon> Weapons { get; set; }
     public DbSet<Unit> Units { get; set; }
