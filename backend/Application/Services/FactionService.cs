@@ -13,7 +13,7 @@ public class FactionService : IFactionService
     private readonly IFactionRepository _factionRepository;
     private readonly IMapper _mapper;
     
-    private readonly FactionValidator _validators;
+    private readonly FactionValidator _validator;
     private readonly FactionRequestValidator _requestValidator;
     private readonly FactionResponseValidator _responseValidator;
     
@@ -29,7 +29,7 @@ public class FactionService : IFactionService
        _factionRepository = factionRepository ?? throw new NullReferenceException("FactionRepository is null");
        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         
-       _validators = validator ?? throw new NullReferenceException("FactionValidators is null");
+       _validator = validator ?? throw new NullReferenceException("FactionValidators is null");
        _requestValidator = requestValidator ?? throw new NullReferenceException("FactionRequestValidators is null");
        _responseValidator = responseValidator ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
@@ -51,7 +51,7 @@ public class FactionService : IFactionService
         if (createdFaction == null)
             throw new Exception("Faction could not be created");
         
-        var validatedFaction = _validators.Validate(createdFaction);
+        var validatedFaction = _validator.Validate(createdFaction);
         
         if (!validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
@@ -63,7 +63,7 @@ public class FactionService : IFactionService
     {
         List<Faction> factionList = _factionRepository.GetAllFactions();
         
-        if (factionList == null || factionList.Count == 0)
+        if (factionList == null)
             throw new Exception("No factions found");
         
         return factionList;
@@ -79,7 +79,7 @@ public class FactionService : IFactionService
         if (faction == null)
             throw new Exception("No faction found");
         
-        var validatedFaction = _validators.Validate(faction);
+        var validatedFaction = _validator.Validate(faction);
         
         if (validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
@@ -92,7 +92,7 @@ public class FactionService : IFactionService
         if (faction == null)
             throw new NullReferenceException("Faction is null");
         
-        var validation = _validators.Validate(faction);
+        var validation = _validator.Validate(faction);
         
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
@@ -103,7 +103,7 @@ public class FactionService : IFactionService
         if (updatedFaction == null)
             throw new Exception("Faction could not be updated");
         
-        var validatedFaction = _validators.Validate(updatedFaction);
+        var validatedFaction = _validator.Validate(updatedFaction);
         
         if (validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
@@ -117,7 +117,7 @@ public class FactionService : IFactionService
         if (faction == null)
             throw new NullReferenceException("Faction is null");
         
-        var validation = _validators.Validate(faction);
+        var validation = _validator.Validate(faction);
         
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());

@@ -1,15 +1,14 @@
 ﻿using Application.DTOs;
-using Application.DTOs.Responses;
 using Application.Interfaces.Repositories;
 using Domain;
 
 namespace Infrastructure.Repositories;
 
-public class WeaponRepository : IWeaponRepository
+public class AbilityRepository : IWeaponRepository
 {
     private readonly DatabaseContext _context;
-
-    public WeaponRepository(DatabaseContext context)
+    
+    public AbilityRepository(DatabaseContext context)
     {
         _context = context;
     }

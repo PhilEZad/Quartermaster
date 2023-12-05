@@ -6,11 +6,9 @@ namespace Application.Interfaces.Repositories;
 
 public interface IWeaponRepository
 {
-    public WeaponResponse Create(WeaponRequest weapon);
-    
+    public Weapon Create(Weapon weapon);
     public List<Weapon> GetAllWeapons();
     public Weapon GetWeaponById(int id);
-    public List<Weapon> GetWeaponByModelId(int id);
     public List<Weapon> GetWeaponByFactionId(int id);
     
     public Weapon Update(Weapon weapon);
