@@ -1,12 +1,8 @@
-
 using Application.DTOs;
 using Application.DTOs.Responses;
-using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
 
 namespace API.Controllers
 {
