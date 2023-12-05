@@ -14,24 +14,24 @@ public class FactionService : IFactionService
     private readonly IMapper _mapper;
     
     private readonly FactionValidator _validators;
-    private readonly FactionRequestValidators _requestValidators;
-    private readonly FactionResponseValidators _responseValidators;
+    private readonly FactionRequestValidator _requestValidator;
+    private readonly FactionResponseValidator _responseValidator;
     
     public FactionService(
        IFactionRepository factionRepository,
        IMapper mapper,
         
        FactionValidator validator,
-       FactionRequestValidators requestValidators,
-       FactionResponseValidators responseValidators
+       FactionRequestValidator requestValidator,
+       FactionResponseValidator responseValidator
     )
     {
        _factionRepository = factionRepository ?? throw new NullReferenceException("FactionRepository is null");
        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         
        _validators = validator ?? throw new NullReferenceException("FactionValidators is null");
-       _requestValidators = requestValidators ?? throw new NullReferenceException("FactionRequestValidators is null");
-       _responseValidators = responseValidators ?? throw new NullReferenceException("FactionResponseValidators is null");
+       _requestValidator = requestValidator ?? throw new NullReferenceException("FactionRequestValidators is null");
+       _responseValidator = responseValidator ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
     
     public Faction CreateFaction(FactionRequest factionRequest)
@@ -39,7 +39,7 @@ public class FactionService : IFactionService
         if (factionRequest == null)
             throw new NullReferenceException("FactionRequest is null");
         
-        var validation = _requestValidators.Validate(factionRequest);
+        var validation = _requestValidator.Validate(factionRequest);
         
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());

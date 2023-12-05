@@ -18,9 +18,9 @@ public class FactionValidator : AbstractValidator<Faction>
     
 }
 
-public class FactionRequestValidators : AbstractValidator<FactionRequest>
+public class FactionRequestValidator : AbstractValidator<FactionRequest>
 {
-    public FactionRequestValidators()
+    public FactionRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
@@ -30,9 +30,9 @@ public class FactionRequestValidators : AbstractValidator<FactionRequest>
     }
 }
 
-public class FactionResponseValidators : AbstractValidator<FactionResponse>
+public class FactionResponseValidator : AbstractValidator<FactionResponse>
 {
-    public FactionResponseValidators()
+    public FactionResponseValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")

@@ -193,8 +193,8 @@ public class FactionTests
         var repoMock = new Mock<IFactionRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
-        var factionRequestValidators = new FactionRequestValidators();
-        var factionResponseValidators = new FactionResponseValidators();
+        var factionRequestValidators = new FactionRequestValidator();
+        var factionResponseValidators = new FactionResponseValidator();
         var factionValidator = new FactionValidator();
 
         return new ServiceSetup(repoMock, mapper, factionRequestValidators, factionResponseValidators, factionValidator);
@@ -205,24 +205,24 @@ public class FactionTests
         private IFactionRepository _factionRepository;
         private IMapper _mapper;
 
-        private FactionRequestValidators _factionRequestValidator;
-        private FactionResponseValidators _factionResponseValidator;
+        private FactionRequestValidator _factionRequestValidator;
+        private FactionResponseValidator _factionResponseValidator;
         private FactionValidator _factionValidator;
 
         public ServiceSetup(
             Mock<IFactionRepository> repositoryMock,
             IMapper mapper,
 
-            FactionRequestValidators factionRequestValidators,
-            FactionResponseValidators factionResponseValidators,
+            FactionRequestValidator factionRequestValidator,
+            FactionResponseValidator factionResponseValidator,
             FactionValidator factionValidator
         )
         {
             _factionRepository = repositoryMock.Object;
             _mapper = mapper;
 
-            _factionRequestValidator = factionRequestValidators;
-            _factionResponseValidator = factionResponseValidators;
+            _factionRequestValidator = factionRequestValidator;
+            _factionResponseValidator = factionResponseValidator;
             _factionValidator = factionValidator;
         }
 
@@ -238,15 +238,15 @@ public class FactionTests
             return this;
         }
 
-        public ServiceSetup WithRequestValidator(FactionRequestValidators loginRequestValidators)
+        public ServiceSetup WithRequestValidator(FactionRequestValidator loginRequestValidator)
         {
-            _factionRequestValidator = loginRequestValidators;
+            _factionRequestValidator = loginRequestValidator;
             return this;
         }
         
-        public ServiceSetup WithResponseValidator(FactionResponseValidators loginResponseValidators)
+        public ServiceSetup WithResponseValidator(FactionResponseValidator loginResponseValidator)
         {
-            _factionResponseValidator = loginResponseValidators;
+            _factionResponseValidator = loginResponseValidator;
             return this;
         }
         
