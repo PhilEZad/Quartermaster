@@ -4,6 +4,7 @@ using Application.Interfaces.Services;
 using Application.Validators;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 
 namespace Application.Services;
 
@@ -25,7 +26,32 @@ public class UnitService : IUnitService
 
     public Unit CreateUnit(UnitRequest unitRequest)
     {
-        throw new NotImplementedException();
+        if (unitRequest == null)
+        {
+            throw new NullReferenceException("UnitRequest is null");
+        }
+        
+        var validationResult = _unitRequestValidator.Validate(unitRequest);
+        
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        
+        var unit = _mapper.Map<Unit>(unitRequest);
+        
+        var repoUnit = _unitRepository.CreateUnit(unit);
+        
+        var returnUnit = _mapper.Map<Unit>(repoUnit);
+        
+        var validationUnitResult = _unitValidator.Validate(returnUnit);
+        
+        if (!validationUnitResult.IsValid)
+        {
+            throw new ValidationException(validationUnitResult.Errors);
+        }
+        
+        return returnUnit;
     }
 
     public List<Unit> GetAllUnits()
