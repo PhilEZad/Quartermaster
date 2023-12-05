@@ -11,5 +11,6 @@ public class DependencyResolver
         service.AddScoped<IDatabase, DatabaseRepository>();
         service.AddScoped<IAccountRepository, AccountRepository>();
         service.AddScoped<IFactionRepository, FactionRepository>();
+        service.AddScoped<IUnitRepository, UnitRepository>();
     }
 }

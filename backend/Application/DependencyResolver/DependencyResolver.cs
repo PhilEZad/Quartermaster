@@ -24,5 +24,7 @@ public class DependencyResolver
         service.AddScoped<IFactionService, FactionService>();
         service.AddScoped<IAuthenticationService, AuthenticationService>();
         service.AddScoped<IAccountService, AccountService>();
+
+        service.AddScoped<IUnitService, UnitService>();
     }
 }
