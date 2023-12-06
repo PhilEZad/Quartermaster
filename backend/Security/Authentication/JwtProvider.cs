@@ -22,12 +22,17 @@ public class JwtProvider : IJwtProvider
 
     public string GenerateToken(User user)
     {
-        var claims = new Claim[]
+        var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sid, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Name, user.Username),
             new(JwtRegisteredClaimNames.Email, user.Email)
         };
+
+        foreach (var role in user.Roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(

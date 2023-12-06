@@ -1,6 +1,7 @@
 ﻿
 using Application.Interfaces.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -28,7 +29,7 @@ public class AccountRepository : IAccountRepository
 
     public User GetUserByUsername(string loginRequestUsername)
     {
-        var returnUser = _context.Users.FirstOrDefault(u => u.Username == loginRequestUsername);
+        var returnUser = _context.Users.Include("Roles").FirstOrDefault(u => u.Username == loginRequestUsername);
         
         return returnUser;
     }

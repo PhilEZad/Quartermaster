@@ -20,6 +20,10 @@ public class DatabaseContext : DbContext
             .HasKey(x => x.Id)
             .HasName("PK_User");
 
+        modelBuilder.Entity<Role>()
+            .HasKey(x => x.Id)
+            .HasName("PK_UserType");
+        
         modelBuilder.Entity<Faction>()
             .HasKey(x => x.Id)
             .HasName("PK_Faction");
@@ -38,8 +42,19 @@ public class DatabaseContext : DbContext
         
         // Setting Foreign Keys
         
-        // Setting Relationships
+        /*
+         * Setting Relationships
+         */
         
+        // Many-to-Many
+        modelBuilder.Entity<Role>()
+            .HasMany(x => x.Users)
+            .WithMany(x => x.Roles)
+            .UsingEntity("RolesToUsersJoinTable");
+        
+        
+
+
         // Setting Indexes
         
         // Setting Constraints
@@ -52,6 +67,7 @@ public class DatabaseContext : DbContext
 
     }
 
+    public DbSet<Role> RolesTable { get; set; }
     public DbSet<Model> Models { get; set; }
     public DbSet<Wargear> Wargear { get; set; }
     public DbSet<Ability> Abilities { get; set; }

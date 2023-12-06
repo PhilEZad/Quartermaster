@@ -8,4 +8,6 @@ public class User
     public DateTime DateCreated { get; set; }
     public DateTime DateModified { get; set; }
     public string HasedPassword { get; set; }
+    
+    public List<Role> Roles { get; set; }
 }

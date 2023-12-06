@@ -27,7 +27,7 @@ namespace API.Controllers
          */
         
         // POST: api/Weapon/CreateAbility>
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route(nameof(CreateAbility))]
         public ActionResult<AbilityResponse> CreateAbility([FromBody] AbilityRequest abilityRequest)

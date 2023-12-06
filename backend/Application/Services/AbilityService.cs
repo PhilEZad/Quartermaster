@@ -81,6 +81,7 @@ public class AbilityService : IAbilityService
 
     public bool DeleteAbility(int id)
     {
-        throw new NotImplementedException();
+        _abilityRepository.DeleteAbility(id);
+        return true;
     }
 }
