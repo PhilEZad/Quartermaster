@@ -64,7 +64,14 @@ public class AbilityService : IAbilityService
 
     public List<AbilityResponse> GetAllAbilities()
     {
-        throw new NotImplementedException();
+        List<Ability> returnList = _abilityRepository.GetAllAbilities();
+        
+        if (returnList == null)
+            throw new NullReferenceException("Ability List can not be null");
+
+        List< AbilityResponse> reponseList = _mapper.Map<List<AbilityResponse>>(returnList);
+        
+        return reponseList;
     }
 
     public AbilityResponse UpdateAbility(AbilityRequest abilityRequest)
