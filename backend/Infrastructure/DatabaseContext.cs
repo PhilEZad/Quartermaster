@@ -67,7 +67,10 @@ public class DatabaseContext : DbContext
             .WithMany(x => x.Units)
             .UsingEntity("FactionsToUnitsJoinTable");
 
-        
+        modelBuilder.Entity<Unit>()
+            .HasMany<Wargear>(x => x.Wargear)
+            .WithMany(x => x.Units)
+            .UsingEntity("WargearToUnitsJoinTable");
         
         // One-to-Many
         modelBuilder.Entity<Unit>()
