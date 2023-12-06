@@ -19,7 +19,7 @@ namespace API.Controllers
 
         public WeaponController(IWeaponService weaponService)
         {
-            _weaponService = weaponService;
+            _weaponService = weaponService ?? throw new NullReferenceException("WeaponService cannot be null");
         }
         
         [Authorize]

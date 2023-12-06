@@ -13,7 +13,7 @@ public class AccountController : ControllerBase
     private readonly IAccountService _accountService;
     public AccountController(IAccountService accountService)
     {
-        _accountService = accountService ?? throw new NullReferenceException();
+        _accountService = accountService ?? throw new NullReferenceException("AccountService cannot be null");
     }
     
     [HttpPost]

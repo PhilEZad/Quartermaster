@@ -14,7 +14,7 @@ namespace API.Controllers
 
         public FactionController(IFactionService factionService)
         {
-            _factionService = factionService ?? throw new NullReferenceException();
+            _factionService = factionService ?? throw new NullReferenceException("FactionService cannot be null");
         }
         
         [AllowAnonymous]

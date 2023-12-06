@@ -19,7 +19,7 @@ namespace API.Controllers
 
         public UnitController(IUnitService unitService)
         {
-            _unitService = unitService;
+            _unitService = unitService ?? throw new NullReferenceException("UnitService cannot be null");
         }
         
         [Authorize]

@@ -14,7 +14,7 @@ namespace API.Controllers
 
         public AuthController(IAuthenticationService authenticationService)
         {
-            _authenticationService = authenticationService;
+            _authenticationService = authenticationService ?? throw new NullReferenceException("AuthenticationService cannot be null");
         }
 
 
