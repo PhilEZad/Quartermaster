@@ -52,8 +52,11 @@ public class DatabaseContext : DbContext
             .WithMany(x => x.Roles)
             .UsingEntity("RolesToUsersJoinTable");
         
+        modelBuilder.Entity<Weapon>()
+            .HasMany(x => x.Abilities)
+            .WithMany(x => x.Weapons)
+            .UsingEntity("AbilitiesToWeaponsJoinTable");
         
-
 
         // Setting Indexes
         
@@ -63,8 +66,6 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<User>()
             .Property(x => x.DateCreated)
             .HasColumnType("datetime2");
-
-
     }
 
     public DbSet<Role> RolesTable { get; set; }
