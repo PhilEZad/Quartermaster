@@ -7,4 +7,7 @@ public class Wargear
     public string Ability { get; set; }
     public string Description { get; set; }
     public int Points { get; set; }
+    
+    public List<Model> Models { get; set; }
+    public List<Unit> Units { get; set; }
 }

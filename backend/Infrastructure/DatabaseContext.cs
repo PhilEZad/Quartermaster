@@ -67,6 +67,14 @@ public class DatabaseContext : DbContext
             .WithMany(x => x.Units)
             .UsingEntity("FactionsToUnitsJoinTable");
 
+        
+        
+        // One-to-Many
+        modelBuilder.Entity<Unit>()
+            .HasMany(x => x.Models)
+            .WithOne(x => x.Unit)
+            .HasForeignKey( x => x.UnitId);
+
         // Setting Indexes
         
         // Setting Constraints

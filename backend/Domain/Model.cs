@@ -5,8 +5,7 @@ public class Model
     // General
     public int Id { get; set; }
     public string Name { get; set; }
-    public Faction Faction { get; set; }
-    
+
     // Stats
     public int Movement { get; set; }
     public int WeaponSkill { get; set; }
@@ -18,4 +17,8 @@ public class Model
     public int Leadership { get; set; }
     public int Save { get; set; }
     
+    public int UnitId { get; set; }
+    public Unit Unit { get; set; }
+    
+    public int Points { get; set; }
 }
