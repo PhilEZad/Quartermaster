@@ -57,6 +57,10 @@ public class DatabaseContext : DbContext
             .WithMany(x => x.Weapons)
             .UsingEntity("AbilitiesToWeaponsJoinTable");
         
+        modelBuilder.Entity<Unit>()
+            .HasMany( x => x.Abilities)
+            .WithMany(x => x.Units)
+            .UsingEntity("AbilitiesToUnitsJoinTable");
 
         // Setting Indexes
         

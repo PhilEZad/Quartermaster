@@ -7,4 +7,5 @@ public class Ability
     public string Description { get; set; }
     
     public List<Weapon> Weapons { get; set; }
+    public List<Unit> Units { get; set; }
 }
