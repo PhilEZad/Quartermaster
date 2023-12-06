@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories;
 
 public interface IAbilityRepository
 {
-    public Ability CreateAbility(Ability request);
+    public Ability CreateAbility(Ability ability);
     
     public Ability GetAbilityById(int id);
     public List<AbilityResponse> GetAllAbilities();

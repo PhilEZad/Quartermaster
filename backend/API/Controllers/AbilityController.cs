@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
+using Application.DTOs.Responses;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPost]
         [Route(nameof(CreateAbility))]
-        public IActionResult CreateAbility([FromBody] AbilityRequest abilityRequest)
+        public ActionResult<AbilityResponse> CreateAbility([FromBody] AbilityRequest abilityRequest)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace API.Controllers
         // GET: api/Weapon/GetAllAbilities
         [HttpGet]
         [Route(nameof(GetAllAbilities))]
-        public IActionResult GetAllAbilities()
+        public ActionResult GetAllAbilities()
         {
             try
             {
@@ -65,7 +66,7 @@ namespace API.Controllers
         // GET: api/Weapon/GetAbilityById
         [HttpGet]
         [Route(nameof(GetAbilityById))]
-        public IActionResult GetAbilityById(int id)
+        public ActionResult GetAbilityById(int id)
         {
             try
             {
@@ -86,7 +87,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPut]
         [Route(nameof(UpdateAbility))]
-        public IActionResult UpdateAbility([FromBody] AbilityRequest abilityRequest)
+        public ActionResult UpdateAbility([FromBody] AbilityRequest abilityRequest)
         {
             try
             {
@@ -107,7 +108,7 @@ namespace API.Controllers
         [Authorize]
         [HttpDelete]
         [Route(nameof(DeleteAbility))]
-        public IActionResult DeleteAbility(int id)
+        public ActionResult DeleteAbility(int id)
         {
             try
             {

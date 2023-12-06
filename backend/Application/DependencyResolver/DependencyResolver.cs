@@ -31,6 +31,10 @@ public class DependencyResolver
         service.AddScoped<WeaponValidator>();
         service.AddScoped<WeaponRequestValidator>();
         service.AddScoped<WeaponResponse>();
+        
+        service.AddScoped<AbilityValidator>();
+        service.AddScoped<AbilityRequestValidator>();
+        service.AddScoped<AbilityResponseValidator>();
 
         // Services
         service.AddScoped<IFactionService, FactionService>();

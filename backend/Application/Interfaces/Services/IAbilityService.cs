@@ -5,7 +5,7 @@ namespace Application.Interfaces.Services;
 
 public interface IAbilityService
 {
-    public AbilityResponse CreateAbility(AbilityRequest abilityRequest);
+    public AbilityResponse CreateAbility(AbilityRequest request);
     
     public AbilityResponse GetAbilityById(int id);
     public List<AbilityResponse> GetAllAbilities();

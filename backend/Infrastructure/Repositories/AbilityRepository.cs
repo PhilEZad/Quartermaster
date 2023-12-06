@@ -14,9 +14,12 @@ public class AbilityRepository : IAbilityRepository
         _context = context;
     }
 
-    public Ability CreateAbility(Ability request)
+    public Ability CreateAbility(Ability ability)
     {
-        throw new NotImplementedException();
+        _context.Abilities.Add(ability);
+        _context.SaveChanges();
+        
+        return ability;
     }
 
     public Ability GetAbilityById(int id)

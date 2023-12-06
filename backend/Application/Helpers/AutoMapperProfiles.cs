@@ -14,11 +14,13 @@ public class AutoMapperProfiles : Profile
         CreateMap<FactionRequest, Faction>();
         CreateMap<UnitRequest, Unit>();
         CreateMap<WeaponRequest, Weapon>();
+        CreateMap<AbilityRequest, Ability>();
         
         
         // Model to Response
         CreateMap<Faction, FactionResponse>();
         CreateMap<Unit, UnitResponse>();
         CreateMap<Weapon, WeaponResponse>();
+        CreateMap<Ability, AbilityResponse>();
     }
 }
