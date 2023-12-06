@@ -62,6 +62,11 @@ public class DatabaseContext : DbContext
             .WithMany(x => x.Units)
             .UsingEntity("AbilitiesToUnitsJoinTable");
 
+        modelBuilder.Entity<Unit>()
+            .HasMany(x => x.Faction)
+            .WithMany(x => x.Units)
+            .UsingEntity("FactionsToUnitsJoinTable");
+
         // Setting Indexes
         
         // Setting Constraints
