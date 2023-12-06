@@ -9,11 +9,14 @@ public class FactionValidator : AbstractValidator<Faction>
 {
     public FactionValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
-            .MaximumLength(50).WithMessage("Name can not be more than 50 characters")
-            .MinimumLength(3).WithMessage("Name must be at least 3 characters long")
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Name must only contain alphanumeric characters");
+            .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("Description can not be empty");
     }
     
 }
@@ -22,11 +25,14 @@ public class FactionRequestValidator : AbstractValidator<FactionRequest>
 {
     public FactionRequestValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
-            .MaximumLength(50).WithMessage("Name can not be more than 50 characters")
-            .MinimumLength(3).WithMessage("Name must be at least 3 characters long")
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Name must only contain alphanumeric characters");
+            .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("Description can not be empty");
     }
 }
 
@@ -35,9 +41,11 @@ public class FactionResponseValidator : AbstractValidator<FactionResponse>
     public FactionResponseValidator()
     {
         RuleFor(x => x.Name)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage("Name can not be empty")
-            .MaximumLength(50).WithMessage("Name can not be more than 50 characters")
-            .MinimumLength(3).WithMessage("Name must be at least 3 characters long")
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Name must only contain alphanumeric characters");
+            .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("Description can not be empty");
     }
 }

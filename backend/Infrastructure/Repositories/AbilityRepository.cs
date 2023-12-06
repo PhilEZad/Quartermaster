@@ -24,12 +24,12 @@ public class AbilityRepository : IAbilityRepository
 
     public Ability GetAbilityById(int id)
     {
-        throw new NotImplementedException();
+        return _context.Abilities.FirstOrDefault(a => a.Id == id);
     }
 
-    public List<AbilityResponse> GetAllAbilities()
+    public List<Ability> GetAllAbilities()
     {
-        throw new NotImplementedException();
+        return _context.Abilities.ToList();
     }
 
     public Ability UpdateAbility(AbilityRequest request)

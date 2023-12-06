@@ -9,6 +9,8 @@ public class UserValidator : AbstractValidator<User>
 {
     public UserValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
         RuleFor(x => x.Id)
             .NotNull().WithMessage("Id cannot be null")
             .GreaterThan(0).WithMessage("Id must be greater than 0")

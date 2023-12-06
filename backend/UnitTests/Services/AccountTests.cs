@@ -235,7 +235,7 @@ public class AccountTests
     }
     
     [Theory]
-    [InlineData(null,"Password cannot be null")]
+    [InlineData(null,"Password can not be null")]
     [InlineData("1234","Password must be at least 8 characters long")]
     [InlineData("","Password can not be empty")]
     public void CreateAccount_WithInvalidPassword_ShouldReturnMessage(String password, String errorMessage)
@@ -290,7 +290,7 @@ public class AccountTests
         var user = new RegisterRequest
         {
             username = "test",
-            email = "thisisavalidemail",
+            email = "thisisavalid@email.test",
             password = "thisisavalidpassword",
         };
 

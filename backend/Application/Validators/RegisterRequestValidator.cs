@@ -8,7 +8,10 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 
         public RegisterRequestValidator()
         {
-            RuleFor(x => x.username).NotNull().WithMessage("Username cannot be null")
+            RuleLevelCascadeMode = CascadeMode.Stop;
+            
+            RuleFor(x => x.username)
+                .NotNull().WithMessage("Username cannot be null")
                 .NotEmpty().WithMessage("Username cannot be empty")
                 .MinimumLength(3).WithMessage("Username must be at least 3 characters long")
                 .Matches("^[a-zA-Z0-9]*$").WithMessage("Username must only contain alphanumeric characters, and can not contain spaces");

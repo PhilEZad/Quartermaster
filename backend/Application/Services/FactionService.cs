@@ -49,7 +49,7 @@ public class FactionService : IFactionService
         var createdFaction = _factionRepository.CreateFaction(faction);
         
         if (createdFaction == null)
-            throw new Exception("Faction could not be created");
+            throw new NullReferenceException("Return Faction is null");
         
         var validatedFaction = _validator.Validate(createdFaction);
         

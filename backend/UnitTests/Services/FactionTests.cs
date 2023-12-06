@@ -119,11 +119,10 @@ public class FactionTests
     }
     
     [Theory]
-    [InlineData("", "Name is required")]
-    [InlineData(" ", "Name is required")]
-    [InlineData(null, "Name is required")]
-    [InlineData("This is a test name that is way too long for the validation", "Name must be between 1 and 50 characters")]
-    [InlineData("Тестовое сообщение", "Faction name must only contain alphanumeric characters")]
+    [InlineData("", "Name can not be empty")]
+    [InlineData(" ", "Name can not be empty")]
+    [InlineData(null, "Name can not be empty")]
+    [InlineData("This is a test name that is way too long for the validation", "Name can not be more than 50 characters")]
     public void CreateFaction_WithInvalidFactionRequestName_ShouldThrowValidationExceptionWithMessage(string TestName, string ErrorMessage)
     {
         //Arrange
@@ -150,6 +149,8 @@ public class FactionTests
         var setup = CreateServiceSetup();
         var service = setup.CreateService();
         
+        
+        
         //Act
         Action test = () => service.CreateFaction(new FactionRequest
         {
@@ -158,7 +159,7 @@ public class FactionTests
         });
         
         //Assert
-        test.Should().Throw<ValidationException>().WithMessage("Description is null");
+        test.Should().Throw<ValidationException>().WithMessage("Description can not be empty");
     }
     
     [Fact]

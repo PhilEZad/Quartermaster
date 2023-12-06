@@ -8,7 +8,10 @@ public class LoginRequestValidators : AbstractValidator<LoginRequest>
 {
     public LoginRequestValidators()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
         RuleFor(x => x.Username)
+            .NotEmpty().WithMessage("Username can not be empty")
             .MinimumLength(4).WithMessage("Username must be at least 3 characters long")
             .MaximumLength(20).WithMessage("Username may not more 20 characters")
             .Matches("^[a-zA-Z0-9]*$").WithMessage("Username must only contain alphanumeric characters, and can not contain spaces");
@@ -22,6 +25,8 @@ public class LoginResponseValidators : AbstractValidator<LoginResponse>
 {
     public LoginResponseValidators()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
         RuleFor(x => x.Jwt)
             .NotEmpty().WithMessage("Token can not be empty");
         

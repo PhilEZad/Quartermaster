@@ -9,7 +9,10 @@ public class UnitValdiator : AbstractValidator<Unit>
 {
     public UnitValdiator()
     {
-        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required");
     }
 }
 
@@ -17,6 +20,9 @@ public class UnitRequestValidator : AbstractValidator<UnitRequest>
 {
     public UnitRequestValidator()
     {
-        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required");
     }
 }

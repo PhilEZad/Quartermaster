@@ -37,6 +37,8 @@ public class WeaponResponseValidator : AbstractValidator<WeaponResponse>
 {
     public WeaponResponseValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Range).NotEmpty();
         RuleFor(x => x.Type).NotEmpty();
