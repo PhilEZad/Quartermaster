@@ -13,7 +13,7 @@ namespace Application.Services;
 public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
-    
+
     private readonly IPasswordHasher _passwordHasher;
     private readonly IMapper _mapper;
     
@@ -28,7 +28,7 @@ public class AccountService : IAccountService
         RegisterRequestValidator registerRequestValidator)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException("AccountRepository is null");
-        
+
         _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         _passwordHasher = passwordHasher ?? throw new NullReferenceException("PasswordHasher is null");
         
@@ -50,16 +50,10 @@ public class AccountService : IAccountService
         
         var user = _mapper.Map<User>(registerRequest);
         
-        if (_accountRepository.DoesUserExist(user.Username))
-            throw new Exception("User already exists");
-        
         user.HasedPassword = _passwordHasher.Hash(registerRequest.password);
         user.DateCreated = DateTime.Now;
         
-        User returnUser = _accountRepository.Create(user);
-        
-        if (returnUser == null)
-            throw new NullReferenceException("Failed to create account");
+        User returnUser = _accountRepository.Create(user, "User");
         
         validation = _userValidator.Validate(returnUser);
         if (!validation.IsValid)

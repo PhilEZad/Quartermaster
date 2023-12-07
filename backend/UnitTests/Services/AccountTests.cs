@@ -224,7 +224,7 @@ public class AccountTests
 
         mockRepo.Setup(x => x.Create(It.IsAny<User>())).Throws(new Exception("User already exists"));
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>()))
+        mockRepo.Setup(x => x.Create(It.IsAny<User, >()))
             .Throws(new Exception("User already exists"));
         
         // Act

@@ -14,9 +14,25 @@ public class AccountRepository : IAccountRepository
         _context = context;
     }
     
-    public User Create(User user)
+    public User Create(User user, string type)
     {
+        if (_context.Users.Any(u => u.Username == user.Username))
+            throw new Exception("User already exists");
+        
+        if (_context.Users.Any(u => u.Email == user.Email))
+            throw new Exception("Email is already registered");
+        
+        var existingRole = _context.RolesTable.First(u => u.Name == type);
+
+        if (existingRole == null)
+        {
+            throw new Exception("Role not found");
+        }
+        
+        user.Roles = new List<Role> { existingRole };
+        
         _context.Users.Add(user);
+        
         _context.SaveChanges();
 
         return user;
