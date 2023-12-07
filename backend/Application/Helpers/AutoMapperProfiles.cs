@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 using AutoMapper;
 using Domain;
@@ -11,7 +11,7 @@ public class AutoMapperProfiles : Profile
     {
         // Request to Model
         CreateMap<RegisterRequest, User>();
-        CreateMap<DTOs.Requests.FactionRequest, Faction>();
+        CreateMap<FactionRequest, Faction>();
         CreateMap<UnitRequest, Unit>();
         CreateMap<WeaponRequest, Weapon>();
         CreateMap<AbilityRequest, Ability>();

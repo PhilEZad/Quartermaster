@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Application.DTOs;
+﻿using Application.DTOs.Requests;
 using Domain;
 using FluentValidation;
 

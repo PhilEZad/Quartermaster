@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
+using Application.DTOs.Requests;
 using Application.Interfaces.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;

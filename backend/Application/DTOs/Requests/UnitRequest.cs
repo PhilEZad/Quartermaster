@@ -1,6 +1,6 @@
 ﻿using Domain;
 
-namespace Application.DTOs;
+namespace Application.DTOs.Requests;
 
 public class UnitRequest
 {

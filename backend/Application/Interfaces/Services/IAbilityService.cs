@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 
 namespace Application.Interfaces.Services;

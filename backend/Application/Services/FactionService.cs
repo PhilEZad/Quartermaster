@@ -1,14 +1,12 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 using Application.DTOs.Updates;
-using Application.Helpers;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 
 namespace Application.Services;
 
@@ -40,7 +38,7 @@ public class FactionService : IFactionService
        _responseValidator = responseValidator ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
     
-    public FactionResponse CreateFaction(DTOs.Requests.FactionRequest factionRequest)
+    public FactionResponse CreateFaction(FactionRequest factionRequest)
     {
         _validationHelper.ValidateAndThrow(_requestValidator, factionRequest);
         var faction = _mapper.Map<Faction>(factionRequest);
