@@ -69,7 +69,7 @@ public class AbilityService : IAbilityService
         if (returnList == null)
             throw new NullReferenceException("Ability List can not be null");
 
-        List< AbilityResponse> reponseList = _mapper.Map<List<AbilityResponse>>(returnList);
+        List<AbilityResponse> reponseList = _mapper.Map<List<AbilityResponse>>(returnList);
         
         return reponseList;
     }

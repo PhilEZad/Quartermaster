@@ -1,13 +1,14 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Responses;
 using Domain;
 
 namespace Application.Interfaces.Services;
 
 public interface IFactionService
 {
-    public Faction CreateFaction(FactionRequest factionRequest);
-    public List<Faction> GetAllFactions();
-    public Faction GetFactionById(int id);
-    public Faction UpdateFaction(Faction faction);
-    public Boolean DeleteFaction(Faction faction);
+    public FactionResponse CreateFaction(FactionRequest factionRequest);
+    public List<FactionResponse> GetAllFactions();
+    public FactionResponse GetFactionById(int id);
+    public FactionResponse UpdateFaction(Faction factionRequest);
+    public Boolean DeleteFaction(Faction factionRequest);
 }

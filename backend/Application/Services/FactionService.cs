@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Responses;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
@@ -34,7 +35,7 @@ public class FactionService : IFactionService
        _responseValidator = responseValidator ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
     
-    public Faction CreateFaction(FactionRequest factionRequest)
+    public FactionResponse CreateFaction(FactionRequest factionRequest)
     {
         if (factionRequest == null)
             throw new NullReferenceException("FactionRequest is null");
@@ -56,20 +57,24 @@ public class FactionService : IFactionService
         if (!validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
         
-        return createdFaction;
+        FactionResponse response = _mapper.Map<FactionResponse>(createdFaction);
+        
+        return response;
     }
 
-    public List<Faction> GetAllFactions()
+    public List<FactionResponse> GetAllFactions()
     {
         List<Faction> factionList = _factionRepository.GetAllFactions();
         
         if (factionList == null)
             throw new Exception("No factions found");
         
-        return factionList;
+        List<FactionResponse> reponseList = _mapper.Map<List<FactionResponse>>(factionList);
+        
+        return reponseList;
     }
 
-    public Faction GetFactionById(int id)
+    public FactionResponse GetFactionById(int id)
     {
         if (id <= 0)
             throw new Exception("Id is invalid");
@@ -84,21 +89,24 @@ public class FactionService : IFactionService
         if (validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
         
-        return faction;
+        FactionResponse response = _mapper.Map<FactionResponse>(faction);
+        
+        return response;
     }
 
-    public Faction UpdateFaction(Faction faction)
+    public FactionResponse UpdateFaction(Faction factionRequest)
     {
-        if (faction == null)
+        if (factionRequest == null)
             throw new NullReferenceException("Faction is null");
         
-        var validation = _validator.Validate(faction);
+        var validation = _validator.Validate(factionRequest);
         
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
+        _mapper.Map<Faction>(factionRequest);
         
-        var updatedFaction = _factionRepository.UpdateFaction(faction);
+        var updatedFaction = _factionRepository.UpdateFaction(factionRequest);
         
         if (updatedFaction == null)
             throw new Exception("Faction could not be updated");
@@ -108,21 +116,24 @@ public class FactionService : IFactionService
         if (validatedFaction.IsValid)
             throw new ValidationException(validatedFaction.ToString());
         
-        return updatedFaction;
+        FactionResponse response = _mapper.Map<FactionResponse>(updatedFaction);
+        
+        
+        return response;
         
     }
 
-    public bool DeleteFaction(Faction faction)
+    public bool DeleteFaction(Faction factionRequest)
     {
-        if (faction == null)
+        if (factionRequest == null)
             throw new NullReferenceException("Faction is null");
         
-        var validation = _validator.Validate(faction);
+        var validation = _validator.Validate(factionRequest);
         
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
-        var deletedFaction = _factionRepository.DeleteFaction(faction);
+        var deletedFaction = _factionRepository.DeleteFaction(factionRequest);
         
         if (!deletedFaction)
             throw new Exception("Faction could not be deleted");

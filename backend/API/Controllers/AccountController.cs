@@ -16,8 +16,10 @@ public class AccountController : ControllerBase
         _accountService = accountService ?? throw new NullReferenceException("AccountService cannot be null");
     }
     
+    [AllowAnonymous]
     [HttpPost]
-    public IActionResult Create([FromBody] RegisterRequest registerRequest)
+    [Route(nameof(CreateUser))]
+    public IActionResult CreateUser([FromBody] RegisterRequest registerRequest)
     {
         try
         {

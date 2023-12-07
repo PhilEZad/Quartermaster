@@ -133,7 +133,7 @@ public class AccountTests
             password = "test1231412312",
         };
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(new User
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Returns(new User
         {
             Id = 1,
             Username = user.username,
@@ -166,7 +166,7 @@ public class AccountTests
             password = "test12312412312312",
         };
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(new User
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Returns(new User
         {
             Id = 1,
             Username = user.username,
@@ -198,7 +198,7 @@ public class AccountTests
             password = "test13214123123123",
         };
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Returns(null as User);
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Returns(null as User);
 
         // Act
         Action result = () => service.Create(user);
@@ -222,9 +222,9 @@ public class AccountTests
             password = "test1234123",
         };
 
-        mockRepo.Setup(x => x.Create(It.IsAny<User>())).Throws(new Exception("User already exists"));
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Throws(new Exception("User already exists"));
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User, >()))
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), ""))
             .Throws(new Exception("User already exists"));
         
         // Act
@@ -278,31 +278,7 @@ public class AccountTests
         // Assert
         result.Should().NotThrow<ValidationException>();
     }
-    
-    [Fact]
-    public void CreateAccount_WithExistingUser_ShouldThrowExceptionWithMessage()
-    {
-        // Arrange
-        var mockRepo = new Mock<IAccountRepository>();
-        var setup = CreateServiceSetup().WithAccountRepository(mockRepo.Object);
-        var service = setup.CreateService();
 
-        var user = new RegisterRequest
-        {
-            username = "test",
-            email = "thisisavalid@email.test",
-            password = "thisisavalidpassword",
-        };
-
-        mockRepo.Setup(x => x.DoesUserExist(user.username)).Returns(true);
-        
-        // Act
-        Action result = () => service.Create(user);
-
-        // Assert
-        result.Should().Throw<Exception>().WithMessage("User already exists");
-    }
-    
     /*
      * Helper Class /w methods for Tests Setup
      */

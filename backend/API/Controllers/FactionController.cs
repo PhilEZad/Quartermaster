@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Application.DTOs.Responses;
 using Application.Interfaces.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@ namespace API.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route(nameof(GetAllFactions))]
-        public ActionResult<List<Faction>> GetAllFactions()
+        public ActionResult<List<FactionResponse>> GetAllFactions()
         {
             try
             {
@@ -35,7 +36,7 @@ namespace API.Controllers
         
         [HttpGet]
         [Route(nameof(GetFactionById))]
-        public ActionResult<Faction> GetFactionById([FromBody] int id)
+        public ActionResult<FactionResponse> GetFactionById([FromBody] int id)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPost]
         [Route(nameof(CreateFaction))]
-        public ActionResult<Faction> CreateFaction([FromBody] FactionRequest factionRequest)
+        public ActionResult<FactionResponse> CreateFaction([FromBody] FactionRequest factionRequest)
         {
             try
             {
@@ -66,7 +67,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPut]
         [Route(nameof(UpdateFaction))]
-        public ActionResult<Faction> UpdateFaction([FromBody] Faction faction)
+        public ActionResult<FactionResponse> UpdateFaction([FromBody] Faction faction)
         {
             try
             {
