@@ -42,8 +42,10 @@ public class FactionRepository : IFactionRepository
         return faction;
     }
 
-    public bool DeleteFaction(Faction faction)
+    public bool DeleteFaction(int id)
     {
+        var faction = _context.Factions.Find(id) ??
+                      throw new Exception("Faction not found");
         _context.Factions.Remove(faction);
         var change =_context.SaveChanges();
         return change > 0;

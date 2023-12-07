@@ -129,7 +129,7 @@ public class FactionTests
         var setup = CreateServiceSetup();
         var service = setup.CreateService();
         
-        var factionRequest = new FactionRequest
+        var factionRequest = new Application.DTOs.Requests.FactionRequest
         {
             Name = TestName,
             Description = "This is an example of a test faction",
@@ -152,7 +152,7 @@ public class FactionTests
         
         
         //Act
-        Action test = () => service.CreateFaction(new FactionRequest
+        Action test = () => service.CreateFaction(new Application.DTOs.Requests.FactionRequest
         {
             Name = "Test Faction",
             Description = null
@@ -176,7 +176,7 @@ public class FactionTests
         var service = setup.CreateService();
 
         //Act
-        Action test = () => service.CreateFaction(new FactionRequest
+        Action test = () => service.CreateFaction(new Application.DTOs.Requests.FactionRequest
         {
             Name = "Test Faction",
             Description = "This is an example of a test faction"

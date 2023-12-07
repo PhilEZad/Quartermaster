@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using Application.Interfaces.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -34,9 +35,10 @@ namespace API.Controllers
             }
         }
         
+        [AllowAnonymous]
         [HttpGet]
-        [Route(nameof(GetFactionById))]
-        public ActionResult<FactionResponse> GetFactionById([FromBody] int id)
+        [Route(nameof(GetFactionById) + "/{id}")]
+        public ActionResult<FactionResponse> GetFactionById([FromRoute] int id)
         {
             try
             {
@@ -51,7 +53,7 @@ namespace API.Controllers
         [Authorize]
         [HttpPost]
         [Route(nameof(CreateFaction))]
-        public ActionResult<FactionResponse> CreateFaction([FromBody] FactionRequest factionRequest)
+        public ActionResult<FactionResponse> CreateFaction([FromBody] Application.DTOs.Requests.FactionRequest factionRequest)
         {
             try
             {
@@ -67,12 +69,12 @@ namespace API.Controllers
         [Authorize]
         [HttpPut]
         [Route(nameof(UpdateFaction))]
-        public ActionResult<FactionResponse> UpdateFaction([FromBody] Faction faction)
+        public ActionResult<FactionResponse> UpdateFaction([FromBody] FactionUpdate update)
         {
             try
             {
-                var factionReturn = _factionService.UpdateFaction(faction);
-                return Ok(factionReturn);
+                var updatedFaction = _factionService.UpdateFaction(update);
+                return Ok(updatedFaction);
             }
             catch (Exception e)
             {
@@ -82,12 +84,12 @@ namespace API.Controllers
         
         [Authorize]
         [HttpDelete]
-        [Route(nameof(DeleteFaction))]
-        public ActionResult DeleteFaction([FromBody] Faction faction)
+        [Route(nameof(DeleteFaction) + "/{id})")]
+        public ActionResult DeleteFaction([FromRoute] int id)
         {
             try
             {
-                _factionService.DeleteFaction(faction);
+                _factionService.DeleteFaction(id);
                 return Ok("Faction deleted");
             }
             catch (Exception e)

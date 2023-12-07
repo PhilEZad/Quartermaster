@@ -11,7 +11,7 @@ public class AutoMapperProfiles : Profile
     {
         // Request to Model
         CreateMap<RegisterRequest, User>();
-        CreateMap<FactionRequest, Faction>();
+        CreateMap<DTOs.Requests.FactionRequest, Faction>();
         CreateMap<UnitRequest, Unit>();
         CreateMap<WeaponRequest, Weapon>();
         CreateMap<AbilityRequest, Ability>();

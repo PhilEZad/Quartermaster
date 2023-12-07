@@ -21,7 +21,7 @@ public class FactionValidator : AbstractValidator<Faction>
     
 }
 
-public class FactionRequestValidator : AbstractValidator<FactionRequest>
+public class FactionRequestValidator : AbstractValidator<DTOs.Requests.FactionRequest>
 {
     public FactionRequestValidator()
     {
