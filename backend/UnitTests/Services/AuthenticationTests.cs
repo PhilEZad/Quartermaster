@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Helpers;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
@@ -185,11 +186,12 @@ public class AuthenticationTests
         var jwtProvider = new JwtProvider(jwtOptions);
         var passwordHasher = new PasswordHasher();
         
+        IValidationHelper validationHelper = new ValidationHelper();
         var loginRequestValidators = new LoginRequestValidators();
         var loginResponseValidators = new LoginResponseValidators();
         var userValidator = new UserValidator();
 
-        return new ServiceSetup(repoMock, mapper, jwtProvider, passwordHasher, loginRequestValidators, loginResponseValidators, userValidator);
+        return new ServiceSetup(repoMock, mapper, jwtProvider, passwordHasher, validationHelper, loginRequestValidators, loginResponseValidators, userValidator);
     }
     
     private class ServiceSetup
@@ -199,6 +201,7 @@ public class AuthenticationTests
         private IJwtProvider _jwtProvider;
         private IPasswordHasher _passwordHasher;
         
+        private IValidationHelper _validatorHelper;
         private LoginRequestValidators _loginRequestValidator;
         private LoginResponseValidators _loginResponseValidator;
         private UserValidator _userValidator;
@@ -209,6 +212,7 @@ public class AuthenticationTests
             IJwtProvider jwtProvider,
             IPasswordHasher passwordHasher,
             
+            IValidationHelper validatorHelper,
             LoginRequestValidators loginRequestValidators,
             LoginResponseValidators loginResponseValidators,
             UserValidator userValidator
@@ -218,10 +222,11 @@ public class AuthenticationTests
             _mapper = mapper;
             _jwtProvider = jwtProvider;
             _passwordHasher = passwordHasher;
-            
+            _validatorHelper = validatorHelper;
+
+            _userValidator = userValidator;
             _loginRequestValidator = loginRequestValidators;
             _loginResponseValidator = loginResponseValidators;
-            _userValidator = userValidator;
         }
 
         public ServiceSetup WithAccountRepository(IAccountRepository repositoryMock)
@@ -273,6 +278,7 @@ public class AuthenticationTests
                 _mapper,
                 _jwtProvider,
                 _passwordHasher,
+                _validatorHelper,
                 _loginRequestValidator,
                 _loginResponseValidator,
                 _userValidator

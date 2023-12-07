@@ -70,7 +70,6 @@ public class FactionService : IFactionService
             throw new Exception("Id is invalid");
         
         Faction faction = _factionRepository.GetFactionById(id);
-        
         _validationHelper.ValidateAndThrow(_validator, faction);
 
         FactionResponse response = _mapper.Map<FactionResponse>(faction);

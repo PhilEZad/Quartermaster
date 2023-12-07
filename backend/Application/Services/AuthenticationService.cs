@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Responses;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -16,6 +17,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly IJwtProvider _jwtProvider;
     private readonly IPasswordHasher _passwordHasher;
     
+    private readonly IValidationHelper _validationHelper;
     private readonly LoginRequestValidators _loginRequestValidator;
     private readonly LoginResponseValidators _loginResponseValidator;
     private readonly UserValidator _userValidator;
@@ -26,6 +28,7 @@ public class AuthenticationService : IAuthenticationService
         IJwtProvider jwtProvider,
         IPasswordHasher passwordHasher,
         
+        IValidationHelper validationHelper,
         LoginRequestValidators loginRequestValidator,
         LoginResponseValidators loginResponseValidator,
         UserValidator userValidator)
@@ -34,7 +37,8 @@ public class AuthenticationService : IAuthenticationService
         _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         _jwtProvider = jwtProvider ?? throw new NullReferenceException("JwtProvider is null");
         _passwordHasher = passwordHasher ?? throw new NullReferenceException("PasswordHasher is null");
-        
+
+        _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
         _loginRequestValidator = loginRequestValidator ?? throw new NullReferenceException("LoginRequestValidator is null");
         _loginResponseValidator = loginResponseValidator ?? throw new NullReferenceException("LoginResponseValidator is null");
         _userValidator = userValidator ?? throw new NullReferenceException("UserValidator is null");
@@ -42,13 +46,7 @@ public class AuthenticationService : IAuthenticationService
 
     public LoginResponse Login(LoginRequest loginRequest)
     {
-        if (loginRequest == null)
-            throw new NullReferenceException("Login Request is null");
-
-        var validation = _loginRequestValidator.Validate(loginRequest);
-        
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
+        _validationHelper.ValidateAndThrow(_loginRequestValidator, loginRequest);
 
         var user = _accountRepository.GetUserByUsername(loginRequest.Username);
         
@@ -57,11 +55,8 @@ public class AuthenticationService : IAuthenticationService
         
         if (!_passwordHasher.Verify(user.HasedPassword, loginRequest.Password))
             throw new Exception("Password is incorrect");
-
-        var validationUser = _userValidator.Validate(user);
         
-        if (!validationUser.IsValid)
-            throw new ValidationException(validationUser.ToString());
+        _validationHelper.ValidateAndThrow(_userValidator, user);
         
         LoginResponse loginResponse = new LoginResponse
         {
