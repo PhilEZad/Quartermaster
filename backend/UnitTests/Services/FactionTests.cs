@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Helpers;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -206,11 +207,12 @@ public class FactionTests
         var repoMock = new Mock<IFactionRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
+        IValidationHelper validationHelper = new ValidationHelper();
         var factionRequestValidators = new FactionRequestValidator();
         var factionResponseValidators = new FactionResponseValidator();
         var factionValidator = new FactionValidator();
 
-        return new ServiceSetup(repoMock, mapper, factionRequestValidators, factionResponseValidators, factionValidator);
+        return new ServiceSetup(repoMock, mapper, validationHelper ,factionRequestValidators, factionResponseValidators, factionValidator);
     }
     
     private class ServiceSetup
@@ -218,6 +220,7 @@ public class FactionTests
         private IFactionRepository _factionRepository;
         private IMapper _mapper;
 
+        private IValidationHelper _validationHelper;
         private FactionRequestValidator _factionRequestValidator;
         private FactionResponseValidator _factionResponseValidator;
         private FactionValidator _factionValidator;
@@ -226,14 +229,15 @@ public class FactionTests
             Mock<IFactionRepository> repositoryMock,
             IMapper mapper,
 
+            IValidationHelper validationHelper,
             FactionRequestValidator factionRequestValidator,
             FactionResponseValidator factionResponseValidator,
-            FactionValidator factionValidator
-        )
+            FactionValidator factionValidator)
         {
             _factionRepository = repositoryMock.Object;
             _mapper = mapper;
 
+            _validationHelper = validationHelper;
             _factionRequestValidator = factionRequestValidator;
             _factionResponseValidator = factionResponseValidator;
             _factionValidator = factionValidator;
@@ -274,6 +278,7 @@ public class FactionTests
             return new FactionService(
                 _factionRepository,
                 _mapper,
+                _validationHelper,
                 _factionValidator,
                 _factionRequestValidator,
                 _factionResponseValidator

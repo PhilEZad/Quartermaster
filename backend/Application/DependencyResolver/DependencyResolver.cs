@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.Responses;
+using Application.Helpers;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
@@ -43,5 +45,8 @@ public class DependencyResolver
         service.AddScoped<IWeaponService, WeaponService>();
         service.AddScoped<IUnitService, UnitService>();
         service.AddScoped<IAbilityService, AbilityService>();
+        
+        // Helpers
+        service.AddScoped<IValidationHelper, ValidationHelper>();
     }
 }
