@@ -19,9 +19,6 @@ public class AuthenticationService : IAuthenticationService
     private readonly IPasswordHasher _passwordHasher;
     
     private readonly IValidationHelper _validationHelper;
-    private readonly LoginRequestValidators _loginRequestValidator;
-    private readonly LoginResponseValidators _loginResponseValidator;
-    private readonly UserValidator _userValidator;
 
     public AuthenticationService(
         IAccountRepository accountRepository,
@@ -29,10 +26,7 @@ public class AuthenticationService : IAuthenticationService
         IJwtProvider jwtProvider,
         IPasswordHasher passwordHasher,
         
-        IValidationHelper validationHelper,
-        LoginRequestValidators loginRequestValidator,
-        LoginResponseValidators loginResponseValidator,
-        UserValidator userValidator)
+        IValidationHelper validationHelper)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException("AccountRepository is null");
         _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
@@ -40,9 +34,6 @@ public class AuthenticationService : IAuthenticationService
         _passwordHasher = passwordHasher ?? throw new NullReferenceException("PasswordHasher is null");
 
         _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
-        _loginRequestValidator = loginRequestValidator ?? throw new NullReferenceException("LoginRequestValidator is null");
-        _loginResponseValidator = loginResponseValidator ?? throw new NullReferenceException("LoginResponseValidator is null");
-        _userValidator = userValidator ?? throw new NullReferenceException("UserValidator is null");
     }
 
     public LoginResponse Login(LoginRequest loginRequest)

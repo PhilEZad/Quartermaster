@@ -50,20 +50,6 @@ public class AuthenticationTests
     }
     
     [Fact]
-    public void CreateService_WithNullLoginRequestValidator_NullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithLoginRequestValidator(null);
-        
-        //Act
-        Action test = () => setup.CreateService();
-        
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("LoginRequestValidator is null");
-    }
-    
-    [Fact]
     public void CreateService_WithNullJwtProvider_NullExceptionReferenceWithMessage()
     {
         //Arrange
@@ -89,34 +75,6 @@ public class AuthenticationTests
         
         //Assert
         test.Should().Throw<NullReferenceException>().WithMessage("PasswordHasher is null");
-    }
-    
-    [Fact]
-    public void CreateService_WithNullLoginResponseValidator_NullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithLoginResponseValidator(null);
-        
-        //Act
-        Action test = () => setup.CreateService();
-        
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("LoginResponseValidator is null");
-    }
-    
-    [Fact]
-    public void CreateService_WithNullUserValidator_NullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithUserValidator(null);
-        
-        //Act
-        Action test = () => setup.CreateService();
-        
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UserValidator is null");
     }
     
     [Fact]
@@ -189,11 +147,8 @@ public class AuthenticationTests
         var passwordHasher = new PasswordHasher();
         
         IValidationHelper validationHelper = new ValidationHelper(new ValidatorFactory());
-        var loginRequestValidators = new LoginRequestValidators();
-        var loginResponseValidators = new LoginResponseValidators();
-        var userValidator = new UserValidator();
 
-        return new ServiceSetup(repoMock, mapper, jwtProvider, passwordHasher, validationHelper, loginRequestValidators, loginResponseValidators, userValidator);
+        return new ServiceSetup(repoMock, mapper, jwtProvider, passwordHasher, validationHelper);
     }
     
     private class ServiceSetup
@@ -204,9 +159,6 @@ public class AuthenticationTests
         private IPasswordHasher _passwordHasher;
         
         private IValidationHelper _validatorHelper;
-        private LoginRequestValidators _loginRequestValidator;
-        private LoginResponseValidators _loginResponseValidator;
-        private UserValidator _userValidator;
 
         public ServiceSetup(
             Mock<IAccountRepository> repositoryMock,
@@ -214,10 +166,7 @@ public class AuthenticationTests
             IJwtProvider jwtProvider,
             IPasswordHasher passwordHasher,
             
-            IValidationHelper validatorHelper,
-            LoginRequestValidators loginRequestValidators,
-            LoginResponseValidators loginResponseValidators,
-            UserValidator userValidator
+            IValidationHelper validatorHelper
         )
         {
             _accountRepository = repositoryMock.Object;
@@ -225,10 +174,6 @@ public class AuthenticationTests
             _jwtProvider = jwtProvider;
             _passwordHasher = passwordHasher;
             _validatorHelper = validatorHelper;
-
-            _userValidator = userValidator;
-            _loginRequestValidator = loginRequestValidators;
-            _loginResponseValidator = loginResponseValidators;
         }
 
         public ServiceSetup WithAccountRepository(IAccountRepository repositoryMock)
@@ -254,24 +199,6 @@ public class AuthenticationTests
             _passwordHasher = passwordHasher;
             return this;
         }
-        
-        public ServiceSetup WithLoginRequestValidator(LoginRequestValidators loginRequestValidators)
-        {
-            _loginRequestValidator = loginRequestValidators;
-            return this;
-        }
-        
-        public ServiceSetup WithLoginResponseValidator(LoginResponseValidators loginResponseValidators)
-        {
-            _loginResponseValidator = loginResponseValidators;
-            return this;
-        }
-        
-        public ServiceSetup WithUserValidator(UserValidator userValidator)
-        {
-            _userValidator = userValidator;
-            return this;
-        }
 
         public AuthenticationService CreateService()
         {
@@ -280,10 +207,7 @@ public class AuthenticationTests
                 _mapper,
                 _jwtProvider,
                 _passwordHasher,
-                _validatorHelper,
-                _loginRequestValidator,
-                _loginResponseValidator,
-                _userValidator
+                _validatorHelper
             );
         }
     }
