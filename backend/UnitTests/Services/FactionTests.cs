@@ -6,6 +6,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
 using Application.Validators;
+using Application.Validators.Factory;
 using AutoMapper;
 using Domain;
 using FluentAssertions;
@@ -47,35 +48,7 @@ public class FactionTests
     }
     
     [Fact]
-    public void CreateService_WithNullFactionRequestValidator_ShouldThrowNullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithRequestValidator(null);
-        
-        //Act
-        Action test = () => setup.CreateService();
-        
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionRequestValidators is null");
-    }
-    
-    [Fact]
-    public void CreateService_WithNullFactionResponseValidator_ShouldThrowNullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithResponseValidator(null);
-        
-        //Act
-        Action test = () => setup.CreateService();
-        
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionResponseValidators is null");
-    }
-    
-    [Fact]
-    public void CreateService_WithNullFactionValidator_ShouldThrowNullExceptionReferenceWithMessage()
+    public void CreateService_WithNullValidatorHelper_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
@@ -85,7 +58,7 @@ public class FactionTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionValidators is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("ValidatorHelper is null");
     }
     
     [Fact]
@@ -207,12 +180,9 @@ public class FactionTests
         var repoMock = new Mock<IFactionRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
 
-        IValidationHelper validationHelper = new ValidationHelper();
-        var factionRequestValidators = new FactionRequestValidator();
-        var factionResponseValidators = new FactionResponseValidator();
-        var factionValidator = new FactionValidator();
+        IValidationHelper validationHelper = new ValidationHelper(new ValidatorFactory());
 
-        return new ServiceSetup(repoMock, mapper, validationHelper ,factionRequestValidators, factionResponseValidators, factionValidator);
+        return new ServiceSetup(repoMock, mapper, validationHelper);
     }
     
     private class ServiceSetup
@@ -221,26 +191,17 @@ public class FactionTests
         private IMapper _mapper;
 
         private IValidationHelper _validationHelper;
-        private FactionRequestValidator _factionRequestValidator;
-        private FactionResponseValidator _factionResponseValidator;
-        private FactionValidator _factionValidator;
 
         public ServiceSetup(
             Mock<IFactionRepository> repositoryMock,
             IMapper mapper,
 
-            IValidationHelper validationHelper,
-            FactionRequestValidator factionRequestValidator,
-            FactionResponseValidator factionResponseValidator,
-            FactionValidator factionValidator)
+            IValidationHelper validationHelper)
         {
             _factionRepository = repositoryMock.Object;
             _mapper = mapper;
 
             _validationHelper = validationHelper;
-            _factionRequestValidator = factionRequestValidator;
-            _factionResponseValidator = factionResponseValidator;
-            _factionValidator = factionValidator;
         }
 
         public ServiceSetup WithRepository(IFactionRepository repositoryMock)
@@ -254,22 +215,10 @@ public class FactionTests
             _mapper = mapper;
             return this;
         }
-
-        public ServiceSetup WithRequestValidator(FactionRequestValidator loginRequestValidator)
-        {
-            _factionRequestValidator = loginRequestValidator;
-            return this;
-        }
         
-        public ServiceSetup WithResponseValidator(FactionResponseValidator loginResponseValidator)
+        public ServiceSetup WithValidator(IValidationHelper validationHelper)
         {
-            _factionResponseValidator = loginResponseValidator;
-            return this;
-        }
-        
-        public ServiceSetup WithValidator(FactionValidator userValidator)
-        {
-            _factionValidator = userValidator;
+            _validationHelper = validationHelper;
             return this;
         }
 
@@ -278,10 +227,7 @@ public class FactionTests
             return new FactionService(
                 _factionRepository,
                 _mapper,
-                _validationHelper,
-                _factionValidator,
-                _factionRequestValidator,
-                _factionResponseValidator
+                _validationHelper
             );
         }
     }

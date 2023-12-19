@@ -47,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
 
     public LoginResponse Login(LoginRequest loginRequest)
     {
-        _validationHelper.ValidateAndThrow(_loginRequestValidator, loginRequest);
+        _validationHelper.ValidateOrThrow(loginRequest);
 
         var user = _accountRepository.GetUserByUsername(loginRequest.Username);
         
@@ -57,7 +57,7 @@ public class AuthenticationService : IAuthenticationService
         if (!_passwordHasher.Verify(user.HasedPassword, loginRequest.Password))
             throw new Exception("Password is incorrect");
         
-        _validationHelper.ValidateAndThrow(_userValidator, user);
+        _validationHelper.ValidateOrThrow(user);
         
         LoginResponse loginResponse = new LoginResponse
         {

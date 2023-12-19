@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Services;
 using Application.Validators;
+using Application.Validators.Factory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.DependencyResolver;
@@ -18,6 +19,8 @@ public class DependencyResolver
         service.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         // Validators
+        service.AddScoped<IValidatorFactory, ValidatorFactory>();
+        
         service.AddScoped<UserValidator>();
         service.AddScoped<RegisterRequestValidator>();
         service.AddScoped<LoginRequestValidators>();

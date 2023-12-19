@@ -16,35 +16,27 @@ public class FactionService : IFactionService
     private readonly IMapper _mapper;
     
     private readonly IValidationHelper _validationHelper;
-    private readonly FactionValidator _validator;
-    private readonly FactionRequestValidator _requestValidator;
-    private readonly FactionResponseValidator _responseValidator;
+
     
     public FactionService(
        IFactionRepository factionRepository,
        IMapper mapper,
         
-       IValidationHelper validationHelper,
-       FactionValidator validator,
-       FactionRequestValidator requestValidator,
-       FactionResponseValidator responseValidator)
+       IValidationHelper validationHelper)
     {
        _factionRepository = factionRepository ?? throw new NullReferenceException("FactionRepository is null");
        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         
        _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
-       _validator = validator ?? throw new NullReferenceException("FactionValidators is null");
-       _requestValidator = requestValidator ?? throw new NullReferenceException("FactionRequestValidators is null");
-       _responseValidator = responseValidator ?? throw new NullReferenceException("FactionResponseValidators is null");
     }
     
     public FactionResponse CreateFaction(FactionRequest factionRequest)
     {
-        _validationHelper.ValidateAndThrow(_requestValidator, factionRequest);
+        _validationHelper.ValidateOrThrow(factionRequest);
         var faction = _mapper.Map<Faction>(factionRequest);
         
         var createdFaction = _factionRepository.CreateFaction(faction);
-        _validationHelper.ValidateAndThrow(_validator, createdFaction);
+        _validationHelper.ValidateOrThrow(createdFaction);
         
         FactionResponse response = _mapper.Map<FactionResponse>(createdFaction);
         return response;
@@ -68,7 +60,7 @@ public class FactionService : IFactionService
             throw new Exception("Id is invalid");
         
         Faction faction = _factionRepository.GetFactionById(id);
-        _validationHelper.ValidateAndThrow(_validator, faction);
+        _validationHelper.ValidateOrThrow(faction);
 
         FactionResponse response = _mapper.Map<FactionResponse>(faction);
 

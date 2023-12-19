@@ -1,6 +1,8 @@
-﻿namespace Application.Validators;
+﻿using FluentValidation;
 
-public interface IValidationFactory
+namespace Application.Validators.Factory;
+
+public interface IValidatorFactory
 {
-    TValidator CreateValidator<TValidator>() where TValidator : class;
+    AbstractValidator<T> GetValidator<T>();
 }

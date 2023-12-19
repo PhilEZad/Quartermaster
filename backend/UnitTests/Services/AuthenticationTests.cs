@@ -6,6 +6,7 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
+using Application.Validators.Factory;
 using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
@@ -187,7 +188,7 @@ public class AuthenticationTests
         var jwtProvider = new JwtProvider(jwtOptions);
         var passwordHasher = new PasswordHasher();
         
-        IValidationHelper validationHelper = new ValidationHelper();
+        IValidationHelper validationHelper = new ValidationHelper(new ValidatorFactory());
         var loginRequestValidators = new LoginRequestValidators();
         var loginResponseValidators = new LoginResponseValidators();
         var userValidator = new UserValidator();
