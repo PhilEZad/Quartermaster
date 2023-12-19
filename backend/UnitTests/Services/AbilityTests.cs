@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.DTOs.Requests;
+using Application.Helpers;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
@@ -55,6 +56,38 @@ public class AbilityTests
 
         // Assert
         test.Should().Throw<NullReferenceException>().WithMessage("ValidationHelper is null");
+    }
+    
+    /*
+     * Creation Test
+     */
+    
+    [Fact]
+    public void CreateAbility_WithNullRequest_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        Action test = () => service.CreateAbility(null);
+
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("AbilityRequest cannot be null");
+    }
+    
+    [Fact]
+    public void CreateAbility_WithValidRequest_ShouldReturnAbilityResponse()
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        var response = service.CreateAbility(new AbilityRequest());
+
+        // Assert
+        response.Should().NotBeNull();
     }
     
     

@@ -1,13 +1,10 @@
-﻿using Application.DTOs;
-using Application.DTOs.Requests;
+﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Application.Validators;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 
 namespace Application.Services;
 
@@ -69,7 +66,9 @@ public class AbilityService : IAbilityService
 
     public bool DeleteAbility(int id)
     {
-        _abilityRepository.DeleteAbility(id);
-        return true;
+        if (id <= 0)
+            throw new ArgumentException("Id is invalid");
+        
+        return _abilityRepository.DeleteAbility(id);
     }
 }
