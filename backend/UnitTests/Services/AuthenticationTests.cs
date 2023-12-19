@@ -107,7 +107,7 @@ public class AuthenticationTests
     // Login Tests
     
     [Fact]
-    public void Login_WithNullLoginRequest_NullExceptionReferenceWithMessage()
+    public void Login_WithNullLoginRequest_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup();

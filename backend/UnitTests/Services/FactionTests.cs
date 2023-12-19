@@ -173,7 +173,7 @@ public class FactionTests
         Action test = () => service.GetFactionById(-1);
         
         //Assert
-        test.Should().Throw<ValidationException>().WithMessage("Id must be greater than 0");
+        test.Should().Throw<ArgumentException>().WithMessage("Id is invalid");
     }
     
     /*
@@ -295,7 +295,7 @@ public class FactionTests
         Action test = () => service.DeleteFaction(-1);
         
         //Assert
-        test.Should().Throw<ValidationException>().WithMessage("Id must be greater than 0");
+        test.Should().Throw<ArgumentException>().WithMessage("Id is invalid");
     }
     
     [Fact]

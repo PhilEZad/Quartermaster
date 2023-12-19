@@ -62,7 +62,7 @@ public class FactionService : IFactionService
     public FactionResponse GetFactionById(int id)
     {
         if (id <= 0)
-            throw new Exception("Id is invalid");
+            throw new ArgumentException("Id is invalid");
         
         Faction faction = _factionRepository.GetFactionById(id);
         _validationHelper.ValidateOrThrow(faction);
@@ -96,7 +96,7 @@ public class FactionService : IFactionService
     public bool DeleteFaction(int id)
     {
         if (id <= 0)
-            throw new Exception("Id is invalid");
+            throw new ArgumentException("Id is invalid");
 
 
         if (!_factionRepository.DeleteFaction(id))
