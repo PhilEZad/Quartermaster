@@ -74,7 +74,23 @@ public class FactionService : IFactionService
 
     public FactionResponse UpdateFaction(FactionUpdate faction)
     {
-        throw new NotImplementedException();
+        if (faction == null)
+            throw new NullReferenceException("FactionUpdate is null");
+        
+        _validationHelper.ValidateOrThrow(faction);
+        
+        Faction factionToUpdate = _mapper.Map<Faction>(faction);
+        
+        Faction updatedFaction = _factionRepository.UpdateFaction(factionToUpdate);
+        
+        if (updatedFaction == null)
+            throw new NullReferenceException("Return Faction is null");
+        
+        _validationHelper.ValidateOrThrow(updatedFaction);
+        
+        FactionResponse response = _mapper.Map<FactionResponse>(updatedFaction);
+        
+        return response;
     }
 
     public bool DeleteFaction(int id)
