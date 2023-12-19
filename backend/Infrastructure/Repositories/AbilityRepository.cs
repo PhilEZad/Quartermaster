@@ -1,8 +1,6 @@
-﻿using Application.DTOs;
-using Application.DTOs.Requests;
-using Application.DTOs.Responses;
-using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -33,9 +31,17 @@ public class AbilityRepository : IAbilityRepository
         return _context.Abilities.ToList();
     }
 
-    public Ability UpdateAbility(AbilityRequest request)
+    public Ability UpdateAbility(Ability ability)
     {
-        throw new NotImplementedException();
+        if (!_context.Abilities.Local.Any(f => f.Id == ability.Id))
+        {
+            _context.Attach(ability);
+        }
+        
+        _context.Entry(ability).State = EntityState.Modified;
+        _context.SaveChanges();
+            
+        return ability;
     }
 
     public bool DeleteAbility(int id)

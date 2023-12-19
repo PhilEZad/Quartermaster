@@ -12,7 +12,7 @@ public interface IAbilityRepository
     public Ability GetAbilityById(int id);
     public List<Ability> GetAllAbilities();
     
-    public Ability UpdateAbility(AbilityRequest request);
+    public Ability UpdateAbility(Ability request);
     
     public Boolean DeleteAbility(int id);
 }

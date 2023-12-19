@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -72,9 +73,25 @@ public class AbilityService : IAbilityService
         return reponseList;
     }
 
-    public AbilityResponse UpdateAbility(AbilityRequest abilityRequest)
+    public AbilityResponse UpdateAbility(AbilityUpdate abilityUpdate)
     {
-        throw new NotImplementedException();
+        if (abilityUpdate == null)
+            throw new NullReferenceException("AbilityUpdate is null");
+        
+        _validationHelper.ValidateOrThrow(abilityUpdate);
+        
+        Ability ability = _mapper.Map<Ability>(abilityUpdate);
+        
+        Ability returnAbility = _abilityRepository.UpdateAbility(ability);
+        
+        if (returnAbility == null)
+            throw new NullReferenceException("Ability is null");
+        
+        _validationHelper.ValidateOrThrow(returnAbility);
+        
+        AbilityResponse response = _mapper.Map<AbilityResponse>(returnAbility);
+        
+        return response;
     }
 
     public bool DeleteAbility(int id)
