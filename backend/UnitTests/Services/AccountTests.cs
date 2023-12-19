@@ -1,10 +1,12 @@
 using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.Helpers;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
+using Application.Validators.Factory;
 using AutoMapper;
 using Domain;
 using FluentAssertions;
@@ -19,7 +21,7 @@ namespace UnitTests.Services;
 public class AccountTests
 {
     [Fact]
-    public void CreateService_WithValidInjections_ShouldNotThrowNullReferenceException()
+    public void CreateService_WithValidInjections_ShouldNotThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup();
@@ -32,7 +34,7 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateService_WithNullRepository_ShouldThrowNullReferenceException()
+    public void CreateService_WithNullRepository_ShouldThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup()
@@ -46,35 +48,21 @@ public class AccountTests
     }
 
     [Fact]
-    public void CreateService_WithNullValidator_ShouldThrowNullReferenceException()
+    public void CreateService_WithNullValidationHelper_ShouldThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup()
-            .WithUserValidator(null);
+            .WithValidationHelper(null);
 
         // Act
         Action test = () => setup.CreateService();
 
         // Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UserValidator is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("ValidationHelper is null");
     }
     
     [Fact]
-    public void CreateService_WithNullValidatorDTO_ShouldThrowNullReferenceException()
-    {
-        // Arrange
-        var setup = CreateServiceSetup()
-            .WithRegisterRequestDto(null);
-
-        // Act
-        Action test = () => setup.CreateService();
-
-        // Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("RegisterRequestDtoValidator is null");
-    }
-    
-    [Fact]
-    public void CreateService_WithNullHasher_ShouldThrowNullReferenceException()
+    public void CreateService_WithNullHasher_ShouldThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup()
@@ -88,7 +76,7 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateService_WithNullMapper_ShouldThrowNullReferenceException()
+    public void CreateService_WithNullMapper_ShouldThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup()
@@ -106,7 +94,7 @@ public class AccountTests
      */
     
     [Fact]
-    public void CreateAccount_WithNull_ShouldThrowNullReferenceException()
+    public void CreateAccount_WithNull_ShouldThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var setup = CreateServiceSetup();
@@ -120,7 +108,7 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateAccount_WithValidObject_ShouldNotThrowNullReferenceException()
+    public void CreateAccount_WithValidObject_ShouldNotThrowNullReferenceExceptionWithMessage()
     {
         // Arrange
         var mockRepo = new Mock<IAccountRepository>();
@@ -167,7 +155,7 @@ public class AccountTests
             password = "test12312412312312",
         };
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Returns(new User
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(),"User")).Returns(new User
         {
             Id = 1,
             Username = user.username,
@@ -185,7 +173,7 @@ public class AccountTests
     }
     
     [Fact]
-    public void CreateAccount_Failure_ShouldReturnFalse()
+    public void CreateAccount_Failure_ShouldThrowArgumentExceptionWithMessage()
     {
         // Arrange
         var mockRepo = new Mock<IAccountRepository>();
@@ -205,7 +193,7 @@ public class AccountTests
         Action result = () => service.Create(user);
 
         // Assert
-        result.Should().Throw<NullReferenceException>().WithMessage("Failed to create account");
+        result.Should().Throw<ArgumentException>().WithMessage("Account could not be created. Please try again.");
     }
     
     [Fact]
@@ -223,9 +211,9 @@ public class AccountTests
             password = "test1234123",
         };
 
-        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "")).Throws(new Exception("User already exists"));
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "User")).Throws(new Exception("User already exists"));
         
-        mockRepo.Setup(x => x.Create(It.IsAny<User>(), ""))
+        mockRepo.Setup(x => x.Create(It.IsAny<User>(), "User"))
             .Throws(new Exception("User already exists"));
         
         // Act
@@ -286,12 +274,11 @@ public class AccountTests
     private ServiceSetup CreateServiceSetup()
     {
         var repoMock = new Mock<IAccountRepository>();
-        var validator = new UserValidator();
-        var validatorDto = new RegisterRequestValidator();
         var hasher = new PasswordHasher();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
+        var validator = new ValidationHelper(new ValidatorFactory());
 
-        return new ServiceSetup(repoMock, hasher, mapper, validator, validatorDto);
+        return new ServiceSetup(repoMock, hasher, mapper, validator);
     }
     
     private class ServiceSetup
@@ -299,21 +286,18 @@ public class AccountTests
         private IAccountRepository _accountRepository;
         private IPasswordHasher _passwordHasher;
         private IMapper _mapper;
-        private UserValidator _userValidator;
-        private RegisterRequestValidator _accountDtoValidator;
+        private IValidationHelper _validationHelper;
 
         public ServiceSetup(
             Mock<IAccountRepository> accountRepository,
             IPasswordHasher passwordHasher,
             IMapper mapper,
-            UserValidator userValidator,
-            RegisterRequestValidator accountDtoValidator)
+            IValidationHelper validationHelper)
         {
             _accountRepository = accountRepository.Object;
             _passwordHasher = passwordHasher;
             _mapper = mapper;
-            _userValidator = userValidator;
-            _accountDtoValidator = accountDtoValidator;
+            _validationHelper = validationHelper;
         }
 
         public ServiceSetup WithAccountRepository(IAccountRepository accountRepositoryMock)
@@ -334,15 +318,9 @@ public class AccountTests
             return this;
         }
 
-        public ServiceSetup WithUserValidator(UserValidator userValidator)
+        public ServiceSetup WithValidationHelper(IValidationHelper validationHelper)
         {
-            _userValidator = userValidator;
-            return this;
-        }
-
-        public ServiceSetup WithRegisterRequestDto(RegisterRequestValidator accountDtoValidator)
-        {
-            _accountDtoValidator = accountDtoValidator;
+            _validationHelper = validationHelper;
             return this;
         }
 
@@ -352,8 +330,7 @@ public class AccountTests
                 _accountRepository,
                 _passwordHasher,
                 _mapper,
-                _userValidator,
-                _accountDtoValidator
+                _validationHelper
             );
         }
     }

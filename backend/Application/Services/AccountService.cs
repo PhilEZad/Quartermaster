@@ -1,12 +1,10 @@
-﻿using Application.DTOs;
-using Application.DTOs.Requests;
+﻿using Application.DTOs.Requests;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Application.Validators;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 
 
 namespace Application.Services;
@@ -17,49 +15,45 @@ public class AccountService : IAccountService
 
     private readonly IPasswordHasher _passwordHasher;
     private readonly IMapper _mapper;
-    
-    private readonly UserValidator _userValidator;
-    private readonly RegisterRequestValidator _accountDtoValidator;
+
+    private readonly IValidationHelper _validatorHelper;
 
     public AccountService(
         IAccountRepository accountRepository,
         IPasswordHasher passwordHasher,
         IMapper mapper,
-        UserValidator userValidator,
-        RegisterRequestValidator registerRequestValidator)
+        IValidationHelper validationHelper)
     {
         _accountRepository = accountRepository ?? throw new NullReferenceException("AccountRepository is null");
 
         _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
         _passwordHasher = passwordHasher ?? throw new NullReferenceException("PasswordHasher is null");
-        
-        _userValidator = userValidator ?? throw new NullReferenceException("UserValidator is null");
-        _accountDtoValidator = registerRequestValidator ?? throw new NullReferenceException("RegisterRequestDtoValidator is null");
+
+        _validatorHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
     }
 
     public Boolean Create(RegisterRequest registerRequest)
     {
         if (registerRequest == null)
         {
-            throw new NullReferenceException("Register Request is null");
+            throw new NullReferenceException("RegisterRequest is null");
         }
 
-        var validation = _accountDtoValidator.Validate(registerRequest);
-
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
+        _validatorHelper.ValidateOrThrow(registerRequest);
         
         var user = _mapper.Map<User>(registerRequest);
         
         user.HasedPassword = _passwordHasher.Hash(registerRequest.password);
         user.DateCreated = DateTime.Now;
+        user.DateModified = DateTime.Now;
         
         User returnUser = _accountRepository.Create(user, "User");
-        
-        validation = _userValidator.Validate(returnUser);
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
 
+        if (returnUser == null)
+        {
+            throw new ArgumentException("Account could not be created. Please try again.");
+        }
+        
         return true;
     }
 }
