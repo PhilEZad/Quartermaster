@@ -1,10 +1,12 @@
-﻿using Application.Helpers;
+﻿using Application.DTOs.Requests;
+using Application.Helpers;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators.Factory;
 using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using Moq;
 
 namespace UnitTests.Services;
@@ -73,6 +75,55 @@ public class WeaponTests
     /*
      * Creation Tests
      */
+
+    [Fact]
+    public void CreateWeapon_WithNullObject_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        // Act
+        Action test = () => service.CreateWeapon(null);
+        
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("WeaponRequest is null");
+    }
+
+    [Theory]
+    [InlineData("", "Name can not be empty")]
+    [InlineData(" ", "Name can not be empty")]
+    [InlineData(null, "Name can not be null")]
+    public void CreateWeapon_WithInvalidName_ShouldThrowValidationExceptionWithMessage(string name, string message)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        var weapon = new WeaponRequest
+        {
+            Name = name
+        };
+        
+        // Act
+        Action test = () => service.CreateWeapon(weapon);
+        
+        //Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
+    
+    [Fact]
+    public void CreateWeapon_WithValidObject_ShouldReturnWeaponResponse()
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        // Act
+        var response = service.CreateWeapon(new WeaponRequest());
+        // Assert
+        response.Should().NotBeNull();
+    }
     
     /*
      * Read Tests
