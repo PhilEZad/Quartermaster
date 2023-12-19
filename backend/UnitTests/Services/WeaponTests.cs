@@ -135,7 +135,7 @@ public class WeaponTests
             return this;
         }
 
-        public UnitService CreateService()
+        public WeaponService CreateService()
         {
             return new WeaponService(
                 _weaponRepository,
