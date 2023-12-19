@@ -1,10 +1,13 @@
-﻿using Application.DTOs.Requests;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.DTOs.Requests;
+using Application.DTOs.Responses;
 using Application.Helpers;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators.Factory;
 using AutoMapper;
+using Domain;
 using FluentAssertions;
 using Moq;
 
@@ -75,21 +78,91 @@ public class AbilityTests
         // Assert
         test.Should().Throw<NullReferenceException>().WithMessage("AbilityRequest cannot be null");
     }
-    
+
     [Fact]
     public void CreateAbility_WithValidRequest_ShouldReturnAbilityResponse()
+    {
+        // Arrange
+        var mockRepo = new Mock<IAbilityRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        mockRepo.Setup(x => x.CreateAbility(It.IsAny<Ability>())).Returns(new Ability
+        {
+            Id = 1,
+            Name = "Ability",
+            Description = "Description"
+        });
+        
+        // Act
+        var response = service.CreateAbility(
+            new AbilityRequest
+            {
+                Name = "Ability",
+                Description = "Description"
+            });
+
+    // Assert
+        response.Should().NotBeNull();
+    }
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void CreateAbility_WithInvalidId_ShouldThrowNullReferenceExceptionWithMessage(int id)
     {
         // Arrange
         var setup = CreateServiceSetup();
         var service = setup.CreateService();
 
         // Act
-        var response = service.CreateAbility(new AbilityRequest());
+        Action test = () => service.GetAbilityById(id);
 
         // Assert
-        response.Should().NotBeNull();
+        test.Should().Throw<ValidationException>().WithMessage("Invalid Id");
     }
     
+    [Theory]
+    [InlineData("", "Name is required")]
+    [InlineData(" ", "Name is required")]
+    [InlineData(null, "Name is required")]
+    public void CreateAbility_WithInvalidName_ShouldThrowValidationExceptionWithMessage(string name, string message)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        
+        
+        // Act
+        Action test = () => service.CreateAbility(new AbilityRequest
+        {
+            Name = name,
+            Description = "Description"
+        });
+
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
+    
+    [Theory]
+    [InlineData(null, "Description can not be null")]
+    public void CreateAbility_WithInvalidDescription_ShouldThrowValidationExceptionWithMessage(string description, string message)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        Action test = () => service.CreateAbility(new AbilityRequest
+        {
+            Name = "Ability",
+            Description = description
+        });
+
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage(message);
+    }
     
     /*
      * Helper Methods
