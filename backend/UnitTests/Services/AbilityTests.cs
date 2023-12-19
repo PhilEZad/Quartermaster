@@ -208,6 +208,50 @@ public class AbilityTests
     }
     
     /*
+     * Update Tests
+     */
+    
+    
+    
+    /*
+     * Delete Tests
+     */
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(null)]
+    public void DeleteAbility_WithInvalidId_ShouldThrowArgumentExceptionWithMessage(int id)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+        
+        // Act
+        Action test = () => service.DeleteAbility(id);
+        
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage("Id is invalid");
+    }
+    
+    [Fact]
+    public void DeleteAbility_WithValidId_ShouldReturnTrue()
+    {
+        // Arrange
+        var mockRepo = new Mock<IAbilityRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        mockRepo.Setup(x => x.DeleteAbility(It.IsAny<int>())).Returns(true);
+        
+        // Act
+        var response = service.DeleteAbility(1);
+
+        // Assert
+        response.Should().BeTrue();
+    }
+    
+    /*
      * Helper Methods
      */
     
@@ -230,7 +274,6 @@ public class AbilityTests
             Mock<IAbilityRepository> repositoryMock,
             IMapper mapper,
             IValidationHelper validatorHelper
-
         )
         {
             _abilityRepository = repositoryMock.Object;

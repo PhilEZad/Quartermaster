@@ -7,6 +7,7 @@ using Application.Interfaces.Services;
 using AutoMapper;
 using Domain;
 using FluentValidation;
+using FluentValidation.TestHelper;
 
 namespace Application.Services;
 
@@ -73,6 +74,11 @@ public class AbilityService : IAbilityService
         return reponseList;
     }
 
+    public AbilityResponse UpdateAbility(AbilityRequest abilityRequest)
+    {
+        throw new NotImplementedException();
+    }
+
     public AbilityResponse UpdateAbility(AbilityUpdate abilityUpdate)
     {
         if (abilityUpdate == null)
@@ -96,8 +102,8 @@ public class AbilityService : IAbilityService
 
     public bool DeleteAbility(int id)
     {
-        if (id <= 0)
-            throw new ArgumentException("Id is invalid");
+        if (id <= 0 || id == null)
+            throw new ValidationException("Id is invalid");
         
         return _abilityRepository.DeleteAbility(id);
     }
