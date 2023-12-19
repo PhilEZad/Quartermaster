@@ -86,7 +86,7 @@ public class UnitTests
         Action test = () => service.CreateUnit(null);
         
         // Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("Unit is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("UnitRequest is null");
     }
 
     [Theory]

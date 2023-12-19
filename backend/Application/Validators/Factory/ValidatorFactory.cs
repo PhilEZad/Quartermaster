@@ -28,6 +28,14 @@ public class ValidatorFactory : IValidatorFactory
             case bool _ when typeof(T) == typeof(User):
                 return (AbstractValidator<T>)(object)new UserValidator();
             
+            // Unit Validators
+            case bool _ when typeof(T) == typeof(Unit):
+                return (AbstractValidator<T>)(object)new UnitValidator();
+            case bool _ when typeof(T) == typeof(UnitRequest):
+                return (AbstractValidator<T>)(object)new UnitRequestValidator();
+            case bool _ when typeof(T) == typeof(UnitResponse):
+                return (AbstractValidator<T>)(object)new UnitResponseValidator();
+            
             // Weapon Validators
             case bool _ when typeof(T) == typeof(Weapon):
                 return (AbstractValidator<T>)(object)new WeaponValidator();

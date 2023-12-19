@@ -30,7 +30,7 @@ public class DependencyResolver
         service.AddScoped<FactionRequestValidator>();
         service.AddScoped<FactionResponseValidator>();
 
-        service.AddScoped<UnitValdiator>();
+        service.AddScoped<UnitValidator>();
         service.AddScoped<UnitRequestValidator>();
         
         service.AddScoped<WeaponValidator>();
