@@ -131,7 +131,7 @@ public class FactionTests
         });
         
         //Assert
-        test.Should().Throw<ValidationException>().WithMessage("Description can not be empty");
+        test.Should().Throw<ValidationException>().WithMessage("Description can not be null");
     }
     
     [Fact]
@@ -191,7 +191,7 @@ public class FactionTests
         Action test = () => service.UpdateFaction(null);
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("FactionRequest is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("FactionUpdate is null");
     }
     
     [Fact]
@@ -216,7 +216,7 @@ public class FactionTests
     [Theory]
     [InlineData("", "Name can not be empty")]
     [InlineData(" ", "Name can not be empty")]
-    [InlineData(null, "Name can not be empty")]
+    [InlineData(null, "Name can not be null")]
     [InlineData("This is a test name that is way too long for the validation", "Name can not be more than 50 characters")]
     public void UpdateFaction_WithInvalidFactionRequestName_ShouldThrowValidationExceptionWithMessage(string TestName, string ErrorMessage)
     {

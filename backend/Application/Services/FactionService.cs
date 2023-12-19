@@ -95,6 +95,13 @@ public class FactionService : IFactionService
 
     public bool DeleteFaction(int id)
     {
-        return _factionRepository.DeleteFaction(id);
+        if (id <= 0)
+            throw new Exception("Id is invalid");
+
+
+        if (!_factionRepository.DeleteFaction(id))
+            throw new ArgumentException("Faction could not be deleted");
+
+        return true;
     }
 }

@@ -34,7 +34,7 @@ public class FactionRequestValidator : AbstractValidator<DTOs.Requests.FactionRe
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description can not be empty");
+            .NotNull().WithMessage("Description can not be null");
     }
 }
 
@@ -50,7 +50,7 @@ public class FactionResponseValidator : AbstractValidator<FactionResponse>
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description can not be empty");
+            .NotNull().WithMessage("Description can not be null");
     }
 }
 
@@ -71,6 +71,6 @@ public class FactionUpdateValidator : AbstractValidator<FactionUpdate>
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description can not be empty");
+            .NotNull().WithMessage("Description can not be null");
     }
 }
