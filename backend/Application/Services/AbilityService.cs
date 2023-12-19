@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Application.Validators;
@@ -14,18 +15,13 @@ public class AbilityService : IAbilityService
 {
     private readonly IAbilityRepository _abilityRepository;
     private readonly IMapper _mapper;
+    private readonly IValidationHelper _validationHelper;
 
-    private readonly AbilityValidator _validator;
-    private readonly AbilityRequestValidator _requestValidator;
-    private readonly AbilityResponseValidator _responseValidator;
-
-    public AbilityService(IAbilityRepository abilityRepository, IMapper mapper, AbilityValidator validator, AbilityRequestValidator requestValidator, AbilityResponseValidator responseValidator)
+    public AbilityService(IAbilityRepository abilityRepository, IMapper mapper, IValidationHelper validationHelper)
     {
         _abilityRepository = abilityRepository;
         _mapper = mapper;
-        _validator = validator;
-        _requestValidator = requestValidator;
-        _responseValidator = responseValidator;
+        _validationHelper = validationHelper;
     }
 
     public AbilityResponse CreateAbility(AbilityRequest request)
@@ -33,9 +29,7 @@ public class AbilityService : IAbilityService
         if (request == null)
             throw new NullReferenceException("AbilityRequest cannot be null");
         
-        var validationRequest = _requestValidator.Validate(request);
-        if (!validationRequest.IsValid)
-            throw new ValidationException(validationRequest.ToString());
+        _validationHelper.ValidateOrThrow(request);
         
         var ability = _mapper.Map<Ability>(request);
 
@@ -44,17 +38,10 @@ public class AbilityService : IAbilityService
         if (returnAbility == null)
             throw new NullReferenceException("AbilityResponse cannot be null");
         
-        var abilityValidation = _validator.Validate(returnAbility);
-        if (!abilityValidation.IsValid)
-            throw new ValidationException(abilityValidation.ToString());
+        _validationHelper.ValidateOrThrow(returnAbility);
         
         var response = _mapper.Map<AbilityResponse>(returnAbility);
-        
-        var validationResponse = _responseValidator.Validate(response);
-        
-        if (!validationResponse.IsValid)
-            throw new ValidationException(validationResponse.ToString());
-        
+
         return response;
     }
 

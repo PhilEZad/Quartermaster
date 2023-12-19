@@ -1,9 +1,11 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.Helpers;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators;
+using Application.Validators.Factory;
 using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
@@ -41,33 +43,19 @@ public class UnitTests
         //Assert
         test.Should().Throw<NullReferenceException>().WithMessage("Mapper is null");
     }
-
-    [Fact]
-    public void CreateService_WithNullUnitRequestValidator_ShouldThrowNullExceptionReferenceWithMessage()
-    {
-        //Arrange
-        var setup = CreateServiceSetup()
-            .WithRequestValidator(null);
-
-        //Act
-        Action test = () => setup.CreateService();
-
-        //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UnitRequestValidator is null");
-    }
     
     [Fact]
-    public void CreateService_WithNullUnitValidator_ShouldThrowNullExceptionReferenceWithMessage()
+    public void CreateService_WithNullValidatorHelper_ShouldThrowNullExceptionReferenceWithMessage()
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithValidator(null);
+            .WithValidtorHelper(null);
 
         //Act
         Action test = () => setup.CreateService();
 
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("UnitValidator is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("ValidationHelper is null");
     }
     
     [Fact]
@@ -152,34 +140,27 @@ public class UnitTests
     {
         var repoMock = new Mock<IUnitRepository>();
         var mapper = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles>()).CreateMapper();
+        var validatorHelper = new ValidationHelper(new ValidatorFactory());
 
-        var unitRequestValidators = new UnitRequestValidator();
-        var unitValidator = new UnitValdiator();
-
-        return new ServiceSetup(repoMock, mapper, unitRequestValidators, unitValidator);
+        return new ServiceSetup(repoMock, mapper,validatorHelper);
     }
 
     private class ServiceSetup
     {
         private IUnitRepository _factionRepository;
         private IMapper _mapper;
-
-        private UnitRequestValidator _factionRequestValidator;
-        private UnitValdiator _factionValidator;
+        private IValidationHelper _validatorHelper;
 
         public ServiceSetup(
             Mock<IUnitRepository> repositoryMock,
             IMapper mapper,
+            IValidationHelper validatorHelper
 
-            UnitRequestValidator factionRequestValidators,
-            UnitValdiator factionValidator
         )
         {
             _factionRepository = repositoryMock.Object;
             _mapper = mapper;
-
-            _factionRequestValidator = factionRequestValidators;
-            _factionValidator = factionValidator;
+            _validatorHelper = validatorHelper;
         }
 
         public ServiceSetup WithRepository(IUnitRepository repositoryMock)
@@ -194,15 +175,9 @@ public class UnitTests
             return this;
         }
 
-        public ServiceSetup WithRequestValidator(UnitRequestValidator loginRequestValidators)
+        public ServiceSetup WithValidtorHelper(IValidationHelper validatorHelper)
         {
-            _factionRequestValidator = loginRequestValidators;
-            return this;
-        }
-
-        public ServiceSetup WithValidator(UnitValdiator validator)
-        {
-            _factionValidator = validator;
+            _validatorHelper = validatorHelper;
             return this;
         }
 
@@ -211,8 +186,7 @@ public class UnitTests
             return new UnitService(
                 _factionRepository,
                 _mapper,
-                _factionValidator,
-                _factionRequestValidator
+                _validatorHelper
             );
         }
     }
