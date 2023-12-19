@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using AutoMapper;
 using Domain;
 
@@ -16,11 +17,14 @@ public class AutoMapperProfiles : Profile
         CreateMap<WeaponRequest, Weapon>();
         CreateMap<AbilityRequest, Ability>();
         
+        CreateMap<FactionUpdate, Faction>();
+        
         
         // Model to Response
         CreateMap<Faction, FactionResponse>();
         CreateMap<Unit, UnitResponse>();
         CreateMap<Weapon, WeaponResponse>();
         CreateMap<Ability, AbilityResponse>();
+        
     }
 }

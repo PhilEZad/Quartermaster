@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using Domain;
 using FluentValidation;
 
@@ -11,6 +12,7 @@ public class FactionValidator : AbstractValidator<Faction>
         RuleLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.Name)
+            .NotNull().WithMessage("Name can not be null")
             .NotEmpty().WithMessage("Name can not be empty")
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 
@@ -27,6 +29,7 @@ public class FactionRequestValidator : AbstractValidator<DTOs.Requests.FactionRe
         RuleLevelCascadeMode = CascadeMode.Stop;
 
         RuleFor(x => x.Name)
+            .NotNull().WithMessage("Name can not be null")
             .NotEmpty().WithMessage("Name can not be empty")
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 
@@ -39,8 +42,31 @@ public class FactionResponseValidator : AbstractValidator<FactionResponse>
 {
     public FactionResponseValidator()
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+        
         RuleFor(x => x.Name)
-            .Cascade(CascadeMode.Stop)
+            .NotNull().WithMessage("Name can not be null")
+            .NotEmpty().WithMessage("Name can not be empty")
+            .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage("Description can not be empty");
+    }
+}
+
+public class FactionUpdateValidator : AbstractValidator<FactionUpdate>
+{
+    public FactionUpdateValidator()
+    {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+
+        RuleFor(x => x.Id)
+            .NotNull().WithMessage("Id can not be null")
+            .NotEmpty().WithMessage("Id can not be empty")
+            .GreaterThan(0).WithMessage("Id must be greater than 0");
+        
+        RuleFor(x => x.Name)
+            .NotNull().WithMessage("Name can not be null")
             .NotEmpty().WithMessage("Name can not be empty")
             .MaximumLength(50).WithMessage("Name can not be more than 50 characters");
 

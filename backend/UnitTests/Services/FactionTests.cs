@@ -93,7 +93,7 @@ public class FactionTests
     [Theory]
     [InlineData("", "Name can not be empty")]
     [InlineData(" ", "Name can not be empty")]
-    [InlineData(null, "Name can not be empty")]
+    [InlineData(null, "Name can not be null")]
     [InlineData("This is a test name that is way too long for the validation", "Name can not be more than 50 characters")]
     public void CreateFaction_WithInvalidFactionRequestName_ShouldThrowValidationExceptionWithMessage(string TestName, string ErrorMessage)
     {

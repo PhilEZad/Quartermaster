@@ -33,12 +33,14 @@ public class FactionRepository : IFactionRepository
 
     public Faction UpdateFaction(Faction faction)
     {
-        _context.Factions.Update(faction);
-        var change = _context.SaveChanges();
+        if (!_context.Factions.Local.Any(f => f.Id == faction.Id))
+        {
+            _context.Attach(faction);
+        }
         
-        if (change == 0)
-            throw new Exception("Faction could not be updated");
-        
+        _context.Entry(faction).State = EntityState.Modified;
+        _context.SaveChanges();
+            
         return faction;
     }
 
