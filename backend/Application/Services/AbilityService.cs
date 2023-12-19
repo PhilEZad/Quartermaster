@@ -19,9 +19,9 @@ public class AbilityService : IAbilityService
 
     public AbilityService(IAbilityRepository abilityRepository, IMapper mapper, IValidationHelper validationHelper)
     {
-        _abilityRepository = abilityRepository;
-        _mapper = mapper;
-        _validationHelper = validationHelper;
+        _abilityRepository = abilityRepository ?? throw new NullReferenceException("AbilityRepository is null");
+        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
+        _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
     }
 
     public AbilityResponse CreateAbility(AbilityRequest request)
