@@ -78,6 +78,20 @@ public class AuthenticationTests
     }
     
     [Fact]
+    public void CreateService_WithValidationHelperAsNull_ShouldThrowNullReferenceException()
+    {
+        //Arrange
+        var setup = CreateServiceSetup()
+            .WithValidatorHelper(null);
+        
+        //Act
+        Action test = () => setup.CreateService();
+        
+        //Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("ValidationHelper is null");
+    }
+    
+    [Fact]
     public void CreateService_WithValidParameters_ShouldNotThrowNullReferenceException()
     {
         //Arrange
@@ -103,7 +117,7 @@ public class AuthenticationTests
         Action test = () => service.Login(null);
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("Login Request is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("LoginRequest is null");
     }
     
     [Theory]
@@ -197,6 +211,12 @@ public class AuthenticationTests
         public ServiceSetup WithPasswordHasher(IPasswordHasher passwordHasher)
         {
             _passwordHasher = passwordHasher;
+            return this;
+        }
+        
+        public ServiceSetup WithValidatorHelper(IValidationHelper validatorHelper)
+        {
+            _validatorHelper = validatorHelper;
             return this;
         }
 

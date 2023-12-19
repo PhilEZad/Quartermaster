@@ -38,6 +38,9 @@ public class AuthenticationService : IAuthenticationService
 
     public LoginResponse Login(LoginRequest loginRequest)
     {
+        if (loginRequest == null)
+            throw new NullReferenceException("LoginRequest is null");
+        
         _validationHelper.ValidateOrThrow(loginRequest);
 
         var user = _accountRepository.GetUserByUsername(loginRequest.Username);

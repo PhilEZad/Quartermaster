@@ -18,6 +18,12 @@ public class ValidatorFactory : IValidatorFactory
             case bool _ when typeof(T) == typeof(FactionResponse):
                 return (AbstractValidator<T>) (object) new FactionResponseValidator();
             
+            // Authentication Validators
+            case bool _ when typeof(T) == typeof(LoginRequest):
+                return (AbstractValidator<T>)(object)new LoginRequestValidators();
+            case bool _ when typeof(T) == typeof(LoginResponse):
+                return (AbstractValidator<T>)(object)new LoginResponseValidators();
+            
             // User Validators
             case bool _ when typeof(T) == typeof(User):
                 return (AbstractValidator<T>)(object)new UserValidator();
