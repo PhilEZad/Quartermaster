@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Application.DTOs.Requests;
+﻿using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 using Application.Helpers;
 using Application.Helpers.Helper_Interfaces;
@@ -9,6 +8,7 @@ using Application.Validators.Factory;
 using AutoMapper;
 using Domain;
 using FluentAssertions;
+using FluentValidation;
 using Moq;
 
 namespace UnitTests.Services;
@@ -107,25 +107,9 @@ public class AbilityTests
     }
     
     [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public void CreateAbility_WithInvalidId_ShouldThrowNullReferenceExceptionWithMessage(int id)
-    {
-        // Arrange
-        var setup = CreateServiceSetup();
-        var service = setup.CreateService();
-
-        // Act
-        Action test = () => service.GetAbilityById(id);
-
-        // Assert
-        test.Should().Throw<ValidationException>().WithMessage("Invalid Id");
-    }
-    
-    [Theory]
-    [InlineData("", "Name is required")]
-    [InlineData(" ", "Name is required")]
-    [InlineData(null, "Name is required")]
+    [InlineData("", "Name is empty")]
+    [InlineData(" ", "Name is empty")]
+    [InlineData(null, "Name is null")]
     public void CreateAbility_WithInvalidName_ShouldThrowValidationExceptionWithMessage(string name, string message)
     {
         // Arrange
@@ -146,7 +130,7 @@ public class AbilityTests
     }
     
     [Theory]
-    [InlineData(null, "Description can not be null")]
+    [InlineData(null, "Description is null")]
     public void CreateAbility_WithInvalidDescription_ShouldThrowValidationExceptionWithMessage(string description, string message)
     {
         // Arrange
@@ -162,6 +146,26 @@ public class AbilityTests
 
         // Assert
         test.Should().Throw<ValidationException>().WithMessage(message);
+    }
+    
+    /*
+     * Read Tests
+     */
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void GetAbility_WithInvalidId_ShouldThrowNullReferenceExceptionWithMessage(int id)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        Action test = () => service.GetAbilityById(id);
+
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage("Invalid Id");
     }
     
     /*
