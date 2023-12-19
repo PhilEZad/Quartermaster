@@ -21,21 +21,26 @@ public class FactionService : IFactionService
     public FactionService(
        IFactionRepository factionRepository,
        IMapper mapper,
-        
        IValidationHelper validationHelper)
     {
        _factionRepository = factionRepository ?? throw new NullReferenceException("FactionRepository is null");
        _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
-        
        _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
     }
     
     public FactionResponse CreateFaction(FactionRequest factionRequest)
     {
+        if (factionRequest == null)
+            throw new NullReferenceException("FactionRequest is null");
+        
         _validationHelper.ValidateOrThrow(factionRequest);
         var faction = _mapper.Map<Faction>(factionRequest);
         
         var createdFaction = _factionRepository.CreateFaction(faction);
+        
+        if (createdFaction == null)
+            throw new NullReferenceException("Return Faction is null");        
+        
         _validationHelper.ValidateOrThrow(createdFaction);
         
         FactionResponse response = _mapper.Map<FactionResponse>(createdFaction);

@@ -49,7 +49,7 @@ public class UnitTests
     {
         //Arrange
         var setup = CreateServiceSetup()
-            .WithValidtorHelper(null);
+            .WithValidatorHelper(null);
 
         //Act
         Action test = () => setup.CreateService();
@@ -175,7 +175,7 @@ public class UnitTests
             return this;
         }
 
-        public ServiceSetup WithValidtorHelper(IValidationHelper validatorHelper)
+        public ServiceSetup WithValidatorHelper(IValidationHelper validatorHelper)
         {
             _validatorHelper = validatorHelper;
             return this;

@@ -58,7 +58,7 @@ public class FactionTests
         Action test = () => setup.CreateService();
         
         //Assert
-        test.Should().Throw<NullReferenceException>().WithMessage("ValidatorHelper is null");
+        test.Should().Throw<NullReferenceException>().WithMessage("ValidationHelper is null");
     }
     
     [Fact]

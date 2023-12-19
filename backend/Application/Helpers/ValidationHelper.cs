@@ -17,7 +17,7 @@ public class ValidationHelper : IValidationHelper
     {
         if (objectToValidate == null)
         {
-            throw new ArgumentException(nameof(objectToValidate) + " can not be null");
+            throw new ArgumentException("Object to validate cannot be null");
         }
         
         var validator = _validatorFactory.GetValidator<T>();
