@@ -1,11 +1,9 @@
-﻿using Application.DTOs;
-using Application.DTOs.Requests;
+﻿using Application.DTOs.Requests;
+using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using Application.Validators;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 
 namespace Application.Services;
 
@@ -13,16 +11,15 @@ public class UnitService : IUnitService
 {
     private readonly IUnitRepository _unitRepository;
     private readonly IMapper _mapper;
+    private readonly IValidationHelper _validationHelper;
     
-    private readonly UnitValdiator _unitValidator;
-    private readonly UnitRequestValidator _unitRequestValidator;
+    
 
-    public UnitService(IUnitRepository unitRepository, IMapper mapper, UnitValdiator unitValidator, UnitRequestValidator unitRequestValidator)
+    public UnitService(IUnitRepository unitRepository, IMapper mapper, IValidationHelper validationHelper)
     {
         _unitRepository = unitRepository ?? throw new NullReferenceException("UnitRepository is null");
         _mapper = mapper ?? throw new NullReferenceException("Mapper is null");
-        _unitValidator = unitValidator ?? throw new NullReferenceException("UnitValidator is null");
-        _unitRequestValidator = unitRequestValidator ?? throw new NullReferenceException("UnitRequestValidator is null");
+        _validationHelper = validationHelper ?? throw new NullReferenceException("ValidationHelper is null");
     }
 
     public Unit CreateUnit(UnitRequest unitRequest)
@@ -31,13 +28,8 @@ public class UnitService : IUnitService
         {
             throw new NullReferenceException("UnitRequest is null");
         }
-        
-        var validationResult = _unitRequestValidator.Validate(unitRequest);
-        
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+
+        _validationHelper.ValidateOrThrow(unitRequest);
         
         var unit = _mapper.Map<Unit>(unitRequest);
         
@@ -45,12 +37,7 @@ public class UnitService : IUnitService
         
         var returnUnit = _mapper.Map<Unit>(repoUnit);
         
-        var validationUnitResult = _unitValidator.Validate(returnUnit);
-        
-        if (!validationUnitResult.IsValid)
-        {
-            throw new ValidationException(validationUnitResult.Errors);
-        }
+        _validationHelper.ValidateOrThrow(returnUnit);
         
         return returnUnit;
     }
