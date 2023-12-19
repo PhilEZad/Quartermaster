@@ -165,7 +165,7 @@ public class AbilityTests
         Action test = () => service.GetAbilityById(id);
 
         // Assert
-        test.Should().Throw<ValidationException>().WithMessage("Invalid Id");
+        test.Should().Throw<ValidationException>().WithMessage("Id is invalid");
     }
     
     [Fact]

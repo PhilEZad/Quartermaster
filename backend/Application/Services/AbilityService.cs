@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 
 namespace Application.Services;
 
@@ -44,7 +45,19 @@ public class AbilityService : IAbilityService
 
     public AbilityResponse GetAbilityById(int id)
     {
-        throw new NotImplementedException();
+        if (id <= 0)
+            throw new ValidationException("Id is invalid");
+        
+        Ability returnAbility = _abilityRepository.GetAbilityById(id);
+        
+        if (returnAbility == null)
+            throw new NullReferenceException("Ability is null");
+        
+        _validationHelper.ValidateOrThrow(returnAbility);
+        
+        AbilityResponse response = _mapper.Map<AbilityResponse>(returnAbility);
+        
+        return response;
     }
 
     public List<AbilityResponse> GetAllAbilities()
