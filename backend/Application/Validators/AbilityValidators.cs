@@ -53,7 +53,7 @@ public class AbilityResponseValidator : AbstractValidator<AbilityResponse>
         RuleLevelCascadeMode = CascadeMode.Stop;
         
         RuleFor(x => x.Id)
-            .NotNull().WithMessage("Invlid Id")
+            .NotNull().WithMessage("Invalid Id")
             .GreaterThan(0).WithMessage("Id must be greater than 0");
         
         RuleFor(x => x.Name)

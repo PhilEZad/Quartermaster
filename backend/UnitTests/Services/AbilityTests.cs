@@ -168,6 +168,45 @@ public class AbilityTests
         test.Should().Throw<ValidationException>().WithMessage("Invalid Id");
     }
     
+    [Fact]
+    public void GetAbility_ReturningNullObject_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var mockRepo = new Mock<IAbilityRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        mockRepo.Setup(x => x.GetAbilityById(It.IsAny<int>())).Returns((Ability) null);
+        
+        // Act
+        Action test = () => service.GetAbilityById(1);
+
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Ability is null");
+    }
+    
+    [Fact]
+    public void GetAbility_WithValidId_ShouldReturnAbilityResponse()
+    {
+        // Arrange
+        var mockRepo = new Mock<IAbilityRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        mockRepo.Setup(x => x.GetAbilityById(It.IsAny<int>())).Returns(new Ability
+        {
+            Id = 1,
+            Name = "Ability",
+            Description = "Description"
+        });
+        
+        // Act
+        var response = service.GetAbilityById(1);
+
+        // Assert
+        response.Should().NotBeNull();
+    }
+    
     /*
      * Helper Methods
      */
