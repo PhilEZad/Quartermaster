@@ -5,6 +5,7 @@ using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
+using Domain;
 
 namespace Application.Services;
 
@@ -23,7 +24,23 @@ public class WeaponService : IWeaponService
 
     public WeaponResponse CreateWeapon(WeaponRequest weaponRequest)
     {
-        throw new NotImplementedException();
+        if (weaponRequest == null)
+            throw new NullReferenceException("WeaponRequest is null");
+        
+        _validationHelper.ValidateOrThrow(weaponRequest);
+        
+        var weapon = _mapper.Map<Weapon>(weaponRequest);
+        
+        var createdWeapon = _weaponRepository.Create(weapon);
+        
+        if (createdWeapon == null)
+            throw new NullReferenceException("Return Weapon is null");
+        
+        _validationHelper.ValidateOrThrow(createdWeapon);
+        
+        WeaponResponse response = _mapper.Map<WeaponResponse>(createdWeapon);
+        
+        return response;
     }
 
     public List<WeaponResponse> GetAllWeapons()

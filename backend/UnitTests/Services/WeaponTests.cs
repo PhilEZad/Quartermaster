@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using Application.Services;
 using Application.Validators.Factory;
 using AutoMapper;
+using Domain;
 using FluentAssertions;
 using FluentValidation;
 using Moq;
@@ -91,9 +92,9 @@ public class WeaponTests
     }
 
     [Theory]
-    [InlineData("", "Name can not be empty")]
-    [InlineData(" ", "Name can not be empty")]
-    [InlineData(null, "Name can not be null")]
+    [InlineData("", "Name is required")]
+    [InlineData(" ", "Name is required")]
+    [InlineData(null, "Name is null")]
     public void CreateWeapon_WithInvalidName_ShouldThrowValidationExceptionWithMessage(string name, string message)
     {
         // Arrange
@@ -102,7 +103,13 @@ public class WeaponTests
         
         var weapon = new WeaponRequest
         {
-            Name = name
+            Name = name,
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Points = 1
         };
         
         // Act
@@ -116,13 +123,70 @@ public class WeaponTests
     public void CreateWeapon_WithValidObject_ShouldReturnWeaponResponse()
     {
         // Arrange
-        var setup = CreateServiceSetup();
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
         var service = setup.CreateService();
         
+        mockRepo.Setup(x => x.Create(It.IsAny<Weapon>())).Returns(new Weapon
+        {
+            Name = "Test Weapon",
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Points = 1
+        });
+        
         // Act
-        var response = service.CreateWeapon(new WeaponRequest());
+        var response = service.CreateWeapon(new WeaponRequest
+        {
+            Name = "Test Weapon",
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Points = 1
+        });
+        
         // Assert
         response.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public void CreateWeapon_WithValidObject_ShouldThrowNoErrors()
+    {
+        // Arrange
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+        
+        mockRepo.Setup(x => x.Create(It.IsAny<Weapon>())).Returns(new Weapon
+        {
+            Name = "Test Weapon",
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Points = 1
+        });
+        
+        // Act
+        var test = () => service.CreateWeapon(new WeaponRequest
+        {
+            Name = "Test Weapon",
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Points = 1
+        });
+        
+        // Assert
+        test.Should().NotThrow<Exception>();
     }
     
     /*

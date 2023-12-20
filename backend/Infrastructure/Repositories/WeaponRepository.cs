@@ -17,7 +17,10 @@ public class WeaponRepository : IWeaponRepository
 
     public Weapon Create(Weapon weapon)
     {
-        throw new NotImplementedException();
+        _context.Weapons.Add(weapon);
+        _context.SaveChanges();
+
+        return weapon;
     }
 
     public List<Weapon> GetAllWeapons()
