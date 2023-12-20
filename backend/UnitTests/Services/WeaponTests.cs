@@ -243,6 +243,49 @@ public class WeaponTests
     /*  
      * Update Tests
      */
+
+    [Fact]
+    public void UpdateWeapon_WithValidObject_ShouldReturnUpdatedObjec()
+    {
+        // Arrange
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+
+        mockRepo.Setup(x => x.Update(It.IsAny<Weapon>())).Returns(new Weapon
+        {
+            Id = 1,
+            Name = "Test Weapon Updated",
+            Faction = new Faction(),
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Abilities = new List<Ability>(),
+            Points = 1
+        });
+        
+        var weapon = new WeaponUpdate
+        {
+            Id = 1,
+            Name = "Test Weapon",
+            Faction = new Faction(),
+            Range = 1,
+            Type = "Melee",
+            Strength = 1,
+            ArmourPenetration = 1,
+            Damage = 1,
+            Abilities = new List<Ability>(),
+            Points = 1
+        };
+        
+        // Act
+        var test = () => service.UpdateWeapon(weapon);
+
+        // Assert
+        test.Should().NotThrow<Exception>();
+    }
     
     /*
      * Delete Tests
