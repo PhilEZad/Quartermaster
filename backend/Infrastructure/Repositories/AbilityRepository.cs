@@ -46,6 +46,10 @@ public class AbilityRepository : IAbilityRepository
 
     public bool DeleteAbility(int id)
     {
-        throw new NotImplementedException();
+        var ability = _context.Abilities.Find(id) ??
+                      throw new Exception("Ability not found");
+        _context.Abilities.Remove(ability);
+        var change =_context.SaveChanges();
+        return change > 0;
     }
 }

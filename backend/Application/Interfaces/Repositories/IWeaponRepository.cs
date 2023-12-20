@@ -14,5 +14,5 @@ public interface IWeaponRepository
     
     public Weapon Update(Weapon weapon);
     
-    public Boolean Delete(WeaponRequest weapon);
+    public Boolean Delete(int id);
 }

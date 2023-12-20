@@ -15,5 +15,5 @@ public interface IWeaponService
     
     public WeaponResponse UpdateWeapon(WeaponRequest weaponRequest);
     
-    public Boolean DeleteWeapon(WeaponRequest weaponRequest);
+    public Boolean DeleteWeapon(int id);
 }

@@ -201,6 +201,39 @@ public class WeaponTests
      * Delete Tests
      */
     
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    public void DeleteWeapon_WithInvalidId_ShouldThrowNullReferenceExceptionWithMessage(int id)
+    {
+        // Arrange
+        var setup = CreateServiceSetup();
+        var service = setup.CreateService();
+
+        // Act
+        Action test = () => service.DeleteWeapon(id);
+        
+        // Assert
+        test.Should().Throw<ValidationException>().WithMessage("Invalid ID");
+    }
+    
+    [Fact]
+    public void DeleteWeapon_WithValidId_ShouldReturnTrue()
+    {
+        // Arrange
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+        
+        mockRepo.Setup(x => x.Delete(It.IsAny<int>())).Returns(true);
+        
+        // Act
+        var response = service.DeleteWeapon(1);
+        
+        // Assert
+        response.Should().BeTrue();
+    }
+    
     /*
      * Helper Methods
      */

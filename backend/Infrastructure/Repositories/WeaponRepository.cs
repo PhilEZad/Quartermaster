@@ -43,8 +43,12 @@ public class WeaponRepository : IWeaponRepository
         throw new NotImplementedException();
     }
 
-    public bool Delete(WeaponRequest weapon)
+    public bool Delete(int id)
     {
-        throw new NotImplementedException();
+        var weapon = _context.Weapons.Find(id) ??
+                      throw new Exception("Faction not found");
+        _context.Weapons.Remove(weapon);
+        var change =_context.SaveChanges();
+        return change > 0;
     }
 }

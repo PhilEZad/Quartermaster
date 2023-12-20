@@ -72,4 +72,12 @@ public class WeaponService : IWeaponService
     {
         throw new NotImplementedException();
     }
+
+    public bool DeleteWeapon(int id)
+    {
+        if (id <= 0)
+            throw new ArgumentOutOfRangeException(nameof(id), "Invalid ID");
+        
+        return _weaponRepository.Delete(id);
+    }
 }
