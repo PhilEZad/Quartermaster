@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 
 namespace Application.Interfaces.Services;
 
@@ -13,7 +14,7 @@ public interface IWeaponService
     public List<WeaponResponse> GetWeaponByModelId(int id);
     public List<WeaponResponse> GetWeaponByFactionId(int id);
     
-    public WeaponResponse UpdateWeapon(WeaponRequest weaponRequest);
+    public WeaponResponse UpdateWeapon(WeaponUpdate weaponUpdate);
     
     public Boolean DeleteWeapon(int id);
 }

@@ -14,10 +14,12 @@ public class AutoMapperProfiles : Profile
         CreateMap<RegisterRequest, User>();
         CreateMap<FactionRequest, Faction>();
         CreateMap<UnitRequest, Unit>();
-        CreateMap<WeaponRequest, Weapon>();
         CreateMap<AbilityRequest, Ability>();
         
         CreateMap<FactionUpdate, Faction>();
+        
+        CreateMap<WeaponRequest, Weapon>();
+        CreateMap<WeaponUpdate, Weapon>();
         
         
         // Model to Response

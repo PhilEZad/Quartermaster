@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -102,11 +103,11 @@ namespace API.Controllers
         [Authorize]
         [HttpPut]
         [Route(nameof(UpdateWeapon))]
-        public IActionResult UpdateWeapon([FromBody] WeaponRequest weaponRequest)
+        public IActionResult UpdateWeapon([FromBody] WeaponUpdate weaponUpdate)
         {
             try
             {
-                var response = _weaponService.UpdateWeapon(weaponRequest);
+                var response = _weaponService.UpdateWeapon(weaponUpdate);
                 return Ok(response);
             }
             catch (Exception e)

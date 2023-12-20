@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.DTOs.Responses;
+using Application.DTOs.Updates;
 using Application.Helpers.Helper_Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
@@ -85,9 +86,25 @@ public class WeaponService : IWeaponService
         return response;
     }
 
-    public WeaponResponse UpdateWeapon(WeaponRequest weaponRequest)
+    public WeaponResponse UpdateWeapon(WeaponUpdate weaponUpdate)
     {
-        throw new NotImplementedException();
+        if (weaponUpdate == null)
+            throw new NullReferenceException("WeaponUpdate is null");
+        
+        _validationHelper.ValidateOrThrow(weaponUpdate);
+        
+        var weapon = _mapper.Map<Weapon>(weaponUpdate);
+        
+        var updatedWeapon = _weaponRepository.Update(weapon);
+        
+        if (updatedWeapon == null)
+            throw new NullReferenceException("Return Weapon is null");
+        
+        _validationHelper.ValidateOrThrow(updatedWeapon);
+        
+        WeaponResponse response = _mapper.Map<WeaponResponse>(updatedWeapon);
+        
+        return response;
     }
 
     public bool DeleteWeapon(WeaponRequest weaponRequest)

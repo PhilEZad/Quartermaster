@@ -51,6 +51,8 @@ public class ValidatorFactory : IValidatorFactory
                 return (AbstractValidator<T>) (object) new WeaponRequestValidator();
             case bool _ when typeof(T) == typeof(WeaponResponse):
                 return (AbstractValidator<T>) (object) new WeaponResponseValidator();
+            case bool _ when typeof(T) == typeof(WeaponUpdate):
+                return (AbstractValidator<T>)(object)new WeaponUpdateValidator();
             
             // Ability Validators
             case bool _ when typeof(T) == typeof(Ability):

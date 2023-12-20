@@ -3,6 +3,7 @@ using Application.DTOs.Requests;
 using Application.DTOs.Responses;
 using Application.Interfaces.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -47,7 +48,15 @@ public class WeaponRepository : IWeaponRepository
 
     public Weapon Update(Weapon weapon)
     {
-        throw new NotImplementedException();
+        if (!_context.Weapons.Local.All(w => w.Id == weapon.Id))
+        {
+            _context.Attach(weapon);
+        }
+        
+        _context.Entry(weapon).State = EntityState.Modified;
+        _context.SaveChanges();
+            
+        return weapon;
     }
 
     public bool Delete(int id)
