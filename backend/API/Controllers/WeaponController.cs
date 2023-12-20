@@ -118,11 +118,11 @@ namespace API.Controllers
         [Authorize]
         [HttpDelete]
         [Route(nameof(DeleteWeapon))]
-        public IActionResult DeleteWeapon([FromBody] WeaponRequest weaponRequest)
+        public IActionResult DeleteWeapon([FromRoute] int id)
         {
             try
             {
-                var response = _weaponService.DeleteWeapon(weaponRequest);
+                var response = _weaponService.DeleteWeapon(id);
                 return Ok(response);
             }
             catch (Exception e)

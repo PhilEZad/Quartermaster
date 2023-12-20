@@ -25,7 +25,7 @@ public class WeaponRepository : IWeaponRepository
 
     public List<Weapon> GetAllWeapons()
     {
-        throw new NotImplementedException();
+        return _context.Weapons.ToList();
     }
 
     public Weapon GetWeaponById(int id)
@@ -33,7 +33,12 @@ public class WeaponRepository : IWeaponRepository
         throw new NotImplementedException();
     }
 
-    public List<Weapon> GetWeaponByFactionId(int id)
+    public List<Weapon> GetWeaponsByModelId(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<Weapon> GetWeaponsByFactionId(int id)
     {
         throw new NotImplementedException();
     }

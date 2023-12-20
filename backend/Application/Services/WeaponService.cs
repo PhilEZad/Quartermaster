@@ -6,6 +6,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 
 namespace Application.Services;
 
@@ -45,7 +46,16 @@ public class WeaponService : IWeaponService
 
     public List<WeaponResponse> GetAllWeapons()
     {
-        throw new NotImplementedException();
+        var weapons = _weaponRepository.GetAllWeapons();
+        
+        if (weapons == null)
+            throw new NullReferenceException("Weapons list is null");
+        
+        _validationHelper.ValidateOrThrow(weapons);
+        
+        List<WeaponResponse> response = _mapper.Map<List<WeaponResponse>>(weapons);
+        
+        return response;
     }
 
     public WeaponResponse GetWeaponById(int id)
@@ -76,7 +86,7 @@ public class WeaponService : IWeaponService
     public bool DeleteWeapon(int id)
     {
         if (id <= 0)
-            throw new ArgumentOutOfRangeException(nameof(id), "Invalid ID");
+            throw new ValidationException("Invalid ID");
         
         return _weaponRepository.Delete(id);
     }

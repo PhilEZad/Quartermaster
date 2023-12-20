@@ -193,6 +193,23 @@ public class WeaponTests
      * Read Tests
      */
     
+    [Fact]
+    public void GetAllWeapons_ReturnListBeingNull_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+        
+        mockRepo.Setup(x => x.GetAllWeapons()).Returns((List<Weapon>) null);
+        
+        // Act
+        Action test = () => service.GetAllWeapons();
+        
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Weapons list is null");
+    }
+    
     /*  
      * Update Tests
      */
