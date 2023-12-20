@@ -40,7 +40,9 @@ public class WeaponRepository : IWeaponRepository
 
     public List<Weapon> GetWeaponsByFactionId(int id)
     {
-        throw new NotImplementedException();
+        return _context.Weapons
+            .Where(w => w.Faction.Id == id)
+            .ToList();
     }
 
     public Weapon Update(Weapon weapon)

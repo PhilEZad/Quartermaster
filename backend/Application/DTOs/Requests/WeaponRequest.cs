@@ -5,6 +5,7 @@ namespace Application.DTOs.Requests;
 public class WeaponRequest
 {
     public string Name { get; set; }
+    public Faction Faction { get; set; }
     
     public int Range { get; set; }
     public string Type { get; set; }

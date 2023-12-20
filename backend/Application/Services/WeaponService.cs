@@ -70,7 +70,19 @@ public class WeaponService : IWeaponService
 
     public List<WeaponResponse> GetWeaponByFactionId(int id)
     {
-        throw new NotImplementedException();
+        if (id <= 0)
+            throw new ValidationException("Invalid ID");
+        
+        var weapons = _weaponRepository.GetWeaponsByFactionId(id);
+        
+        if (weapons == null)
+            throw new NullReferenceException("Weapons list is null");
+        
+        _validationHelper.ValidateOrThrow(weapons);
+        
+        List<WeaponResponse> response = _mapper.Map<List<WeaponResponse>>(weapons);
+        
+        return response;
     }
 
     public WeaponResponse UpdateWeapon(WeaponRequest weaponRequest)

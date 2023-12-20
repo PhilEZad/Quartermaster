@@ -104,11 +104,13 @@ public class WeaponTests
         var weapon = new WeaponRequest
         {
             Name = name,
+            Faction = new Faction(),
             Range = 1,
             Type = "Melee",
             Strength = 1,
             ArmourPenetration = 1,
             Damage = 1,
+            Abilities = new List<Ability>(),
             Points = 1
         };
         
@@ -129,12 +131,15 @@ public class WeaponTests
         
         mockRepo.Setup(x => x.Create(It.IsAny<Weapon>())).Returns(new Weapon
         {
+            Id = 1,
             Name = "Test Weapon",
+            Faction = new Faction(),
             Range = 1,
             Type = "Melee",
             Strength = 1,
             ArmourPenetration = 1,
             Damage = 1,
+            Abilities = new List<Ability>(),
             Points = 1
         });
         
@@ -142,11 +147,13 @@ public class WeaponTests
         var response = service.CreateWeapon(new WeaponRequest
         {
             Name = "Test Weapon",
+            Faction = new Faction(),
             Range = 1,
             Type = "Melee",
             Strength = 1,
             ArmourPenetration = 1,
             Damage = 1,
+            Abilities = new List<Ability>(),
             Points = 1
         });
         
@@ -164,24 +171,30 @@ public class WeaponTests
         
         mockRepo.Setup(x => x.Create(It.IsAny<Weapon>())).Returns(new Weapon
         {
+            Id = 1,
             Name = "Test Weapon",
+            Faction = new Faction(),
             Range = 1,
             Type = "Melee",
             Strength = 1,
             ArmourPenetration = 1,
             Damage = 1,
+            Abilities = new List<Ability>(),
             Points = 1
+            
         });
         
         // Act
         var test = () => service.CreateWeapon(new WeaponRequest
         {
             Name = "Test Weapon",
+            Faction = new Faction(),
             Range = 1,
             Type = "Melee",
             Strength = 1,
             ArmourPenetration = 1,
             Damage = 1,
+            Abilities = new List<Ability>(),
             Points = 1
         });
         
@@ -205,6 +218,23 @@ public class WeaponTests
         
         // Act
         Action test = () => service.GetAllWeapons();
+        
+        // Assert
+        test.Should().Throw<NullReferenceException>().WithMessage("Weapons list is null");
+    }
+    
+    [Fact]
+    public void GetWeaponsByFaction_ReturnListBeingNull_ShouldThrowNullReferenceExceptionWithMessage()
+    {
+        // Arrange
+        var mockRepo = new Mock<IWeaponRepository>();
+        var setup = CreateServiceSetup().WithRepository(mockRepo.Object);
+        var service = setup.CreateService();
+        
+        mockRepo.Setup(x => x.GetWeaponsByFactionId(It.IsAny<int>())).Returns((List<Weapon>) null);
+        
+        // Act
+        Action test = () => service.GetWeaponByFactionId(1);
         
         // Assert
         test.Should().Throw<NullReferenceException>().WithMessage("Weapons list is null");

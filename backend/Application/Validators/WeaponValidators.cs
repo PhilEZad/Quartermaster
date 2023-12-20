@@ -11,9 +11,15 @@ public class WeaponValidator : AbstractValidator<Weapon>
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
         
+        RuleFor(x => x.Id)
+            .NotNull().WithMessage("Id is null")
+            .NotEmpty().WithMessage("Id is required");
         RuleFor(x => x.Name)
             .NotNull().WithMessage("Name is null")
             .NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Faction)
+            .NotNull().WithMessage("Faction is null")
+            .NotEmpty().WithMessage("Faction is required");
         RuleFor(x => x.Range)
             .NotNull().WithMessage("Range is null")
             .NotEmpty().WithMessage("Range is required");
@@ -32,6 +38,8 @@ public class WeaponValidator : AbstractValidator<Weapon>
         RuleFor(x => x.Points)
             .NotNull().WithMessage("Points is null")
             .NotEmpty().WithMessage("Points are required");
+        RuleFor(x => x.Abilities)
+            .NotNull().WithMessage("Abilities is null");
     }
 }
 
@@ -44,6 +52,9 @@ public class WeaponRequestValidator : AbstractValidator<WeaponRequest>
         RuleFor(x => x.Name)
             .NotNull().WithMessage("Name is null")
             .NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Faction)
+            .NotNull().WithMessage("Faction is null")
+            .NotEmpty().WithMessage("Faction is required");
         RuleFor(x => x.Range)
             .NotNull().WithMessage("Range is null")
             .NotEmpty().WithMessage("Range is required");
@@ -62,6 +73,8 @@ public class WeaponRequestValidator : AbstractValidator<WeaponRequest>
         RuleFor(x => x.Points)
             .NotNull().WithMessage("Points is null")
             .NotEmpty().WithMessage("Points are required");
+        RuleFor(x => x.Abilities)
+            .NotNull().WithMessage("Abilities is null");
     }
 }
 
@@ -71,9 +84,15 @@ public class WeaponResponseValidator : AbstractValidator<WeaponResponse>
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
         
+        RuleFor(x => x.Id)
+            .NotNull().WithMessage("Id is null")
+            .NotEmpty().WithMessage("Id is required");
         RuleFor(x => x.Name)
             .NotNull().WithMessage("Name is null")
             .NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Faction)
+            .NotNull().WithMessage("Faction is null")
+            .NotEmpty().WithMessage("Faction is required");
         RuleFor(x => x.Range)
             .NotNull().WithMessage("Range is null")
             .NotEmpty().WithMessage("Range is required");
@@ -92,5 +111,7 @@ public class WeaponResponseValidator : AbstractValidator<WeaponResponse>
         RuleFor(x => x.Points)
             .NotNull().WithMessage("Points is null")
             .NotEmpty().WithMessage("Points are required");
+        RuleFor(x => x.Abilities)
+            .NotNull().WithMessage("Abilities is null");
     }
 }
